@@ -1,9 +1,10 @@
-import { Pressable, StyleSheet, useColorScheme } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 
 import { Text, View, TextInput } from "@/components/Themed";
 import { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+import Colors from "@/constants/Colors";
+import { useColorScheme } from "@/components/useColorScheme";
 
 type Todo = {
   title: string;
