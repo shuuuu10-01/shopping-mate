@@ -1,18 +1,56 @@
-import { StyleSheet } from "react-native";
+import { Pressable, StyleSheet, useColorScheme } from "react-native";
 
-import EditScreenInfo from "@/components/EditScreenInfo";
-import { Text, View } from "@/components/Themed";
+import { Text, View, TextInput } from "@/components/Themed";
+import { useState } from "react";
+import { FontAwesome } from "@expo/vector-icons";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+
+type Todo = {
+  title: string;
+  completed: boolean;
+};
 
 export default function TabOneScreen() {
+  const [todo, setTodo] = useState<Todo[]>([]);
+  const [title, setTitle] = useState("");
+  const colorScheme = useColorScheme();
+
+  const handlePress = () => {
+    setTodo((prev) => {
+      return [
+        ...prev,
+        {
+          title: title,
+          completed: false,
+        },
+      ];
+    });
+    setTitle("");
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
+      <TextInput
+        style={styles.input}
+        value={title}
+        onChangeText={setTitle}
+        blurOnSubmit
+        enterKeyHint="done"
+        placeholder="TODOを入力してください"
       />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <Pressable onPress={handlePress}>
+        {({ pressed }) => (
+          <FontAwesome
+            name="plus"
+            size={30}
+            color={Colors[colorScheme ?? "light"].text}
+            style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+          />
+        )}
+      </Pressable>
+      {todo.map((t, index) => {
+        return <Text key={index}>{t.title}</Text>;
+      })}
     </View>
   );
 }
@@ -21,15 +59,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
+  input: {
     width: "80%",
+    height: 40,
+    padding: 10,
+    margin: 12,
+    borderWidth: 0.5,
+    borderRadius: 4,
   },
 });
