@@ -8,6 +8,8 @@ export default {
     tint: tintColorLight,
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorLight,
+    border: "#000",
+    placeholderText: "gba(0,0,0,0.1)",
   },
   dark: {
     text: "#fff",
@@ -15,5 +17,7 @@ export default {
     tint: tintColorDark,
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorDark,
+    border: "#fff",
+    placeholderText: "gba(255,255,255,0.1)",
   },
 };
