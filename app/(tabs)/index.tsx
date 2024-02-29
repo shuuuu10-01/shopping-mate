@@ -5,27 +5,21 @@ import { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
-
-type Todo = {
-  title: string;
-  completed: boolean;
-};
+import { actions, useAppDispatch, useAppSelector } from "@/redux";
 
 export default function TabOneScreen() {
-  const [todo, setTodo] = useState<Todo[]>([]);
+  const { todo } = useAppSelector((state) => state.todo);
+  const dispatch = useAppDispatch();
   const [title, setTitle] = useState("");
   const colorScheme = useColorScheme();
 
   const handlePress = () => {
-    setTodo((prev) => {
-      return [
-        ...prev,
-        {
-          title: title,
-          completed: false,
-        },
-      ];
-    });
+    dispatch(
+      actions.todo.pushTodo({
+        title: title,
+        completed: false,
+      }),
+    );
     setTitle("");
   };
 
