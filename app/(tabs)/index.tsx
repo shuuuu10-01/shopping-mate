@@ -1,30 +1,25 @@
-import { Pressable, StyleSheet, useColorScheme } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 
 import { Text, View, TextInput } from "@/components/Themed";
 import { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { Colors } from "react-native/Libraries/NewAppScreen";
-
-type Todo = {
-  title: string;
-  completed: boolean;
-};
+import Colors from "@/constants/Colors";
+import { useColorScheme } from "@/components/useColorScheme";
+import { actions, useAppDispatch, useAppSelector } from "@/redux";
 
 export default function TabOneScreen() {
-  const [todo, setTodo] = useState<Todo[]>([]);
+  const { todo } = useAppSelector((state) => state.todo);
+  const dispatch = useAppDispatch();
   const [title, setTitle] = useState("");
   const colorScheme = useColorScheme();
 
   const handlePress = () => {
-    setTodo((prev) => {
-      return [
-        ...prev,
-        {
-          title: title,
-          completed: false,
-        },
-      ];
-    });
+    dispatch(
+      actions.todo.pushTodo({
+        title: title,
+        completed: false,
+      }),
+    );
     setTitle("");
   };
 
