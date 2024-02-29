@@ -9,15 +9,15 @@ export default {
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorLight,
     border: "#000",
-    placeholderText: "gba(0,0,0,0.1)",
+    placeholderText: "#ccc",
   },
   dark: {
     text: "#fff",
-    background: "#000",
+    background: "#1C1C1E",
     tint: tintColorDark,
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorDark,
     border: "#fff",
-    placeholderText: "gba(255,255,255,0.1)",
+    placeholderText: "#98989E",
   },
 };
