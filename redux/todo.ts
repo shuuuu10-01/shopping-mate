@@ -1,10 +1,23 @@
-import { Todo } from "@/types/todo";
-import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
+import { SerializedTodo, Todo } from "@/types/todo";
+import { PayloadAction, createEntityAdapter, createSelector, createSlice } from "@reduxjs/toolkit";
+
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
+
+type State = {
+  todo: SerializedTodo;
+};
+
+const todoAdapter = createEntityAdapter({
+  selectId: (todo: Todo) => todo.id,
+});
+
+const todoSelectors = todoAdapter.getSelectors();
 
 const sampleSelector = createSelector(
-  (state: Todo[]) => state,
+  (state: State) => todoSelectors.selectAll(state.todo),
   (state) => {
-    return state;
+    return state.filter((s) => !s.completed);
   },
 );
 
@@ -15,11 +28,11 @@ export const selectors = {
 export const { actions, reducer } = createSlice({
   name: "todo",
   initialState: {
-    todo: [] as Todo[],
-  },
+    todo: todoAdapter.getInitialState(),
+  } as State,
   reducers: {
-    pushTodo(state, action: PayloadAction<Todo>) {
-      state.todo.push(action.payload);
+    pushTodo(state, action: PayloadAction<Omit<Todo, "id">>) {
+      todoAdapter.addOne(state.todo, { ...action.payload, id: uuidv4() });
     },
   },
 });

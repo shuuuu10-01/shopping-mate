@@ -18,13 +18,10 @@ import {
   REGISTER,
 } from "redux-persist";
 
-const persistConfig = {
-  key: "root",
-  storage: AsyncStorage,
-};
+const rootReducer = combineReducers({ todo: todoReducer });
 
 export const store = configureStore({
-  reducer: { todo: persistReducer(persistConfig, todoReducer) },
+  reducer: persistReducer({ key: "root", storage: AsyncStorage, whitelist: ["todo"] }, rootReducer),
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -40,7 +37,6 @@ export const actions = {
 };
 export const selectors = { todo: todoSelectors };
 
-const rootReducer = combineReducers({ todo: todoReducer });
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
 export * from "./hooks";
