@@ -1,19 +1,21 @@
 import { Pressable, StyleSheet } from "react-native";
 
-import { Text, View, TextInput } from "@/components/Themed";
-import { useState } from "react";
+import { View, TextInput } from "@/components/Themed";
+import React, { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
-import { actions, useAppDispatch, useAppSelector } from "@/redux";
+import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
+import { TodoList } from "@/components/TodoList";
 
 export default function TabOneScreen() {
-  const { todo } = useAppSelector((state) => state.todo);
+  const todo = useAppSelector((state) => selectors.todo.sampleSelector(state.todo));
   const dispatch = useAppDispatch();
   const [title, setTitle] = useState("");
   const colorScheme = useColorScheme();
 
   const handlePress = () => {
+    if (title === "") return;
     dispatch(
       actions.todo.pushTodo({
         title: title,
@@ -43,9 +45,7 @@ export default function TabOneScreen() {
           />
         )}
       </Pressable>
-      {todo.map((t, index) => {
-        return <Text key={index}>{t.title}</Text>;
-      })}
+      <TodoList todo={todo} />
     </View>
   );
 }
