@@ -31,8 +31,15 @@ export const { actions, reducer } = createSlice({
     todo: todoAdapter.getInitialState(),
   } as State,
   reducers: {
-    pushTodo(state, action: PayloadAction<Omit<Todo, "id">>) {
-      todoAdapter.addOne(state.todo, { ...action.payload, id: uuidv4() });
+    pushTodo(state, action: PayloadAction<Omit<Todo, "id" | "order">>) {
+      todoAdapter.addOne(state.todo, {
+        ...action.payload,
+        id: uuidv4(),
+        order: state.todo.ids.length,
+      });
+    },
+    setMany(state, action: PayloadAction<Todo[]>) {
+      todoAdapter.setMany(state.todo, action.payload);
     },
   },
 });
