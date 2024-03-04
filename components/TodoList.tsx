@@ -30,18 +30,41 @@ export function TodoList() {
     dispatch(actions.todo.setMany(converted));
   };
 
+  const handleToggleCheck = (item: Todo) => {
+    dispatch(actions.todo.toggle(item));
+  };
+
   const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
     return (
       <ScaleDecorator>
         <View style={styles.item}>
-          <Text>{item.title}</Text>
+          <Pressable
+            style={styles.checkWrapper}
+            onPress={() => handleToggleCheck(item)}
+            disabled={isActive}
+          >
+            {() => (
+              <>
+                <FontAwesome
+                  name={item.completed ? "check-square" : "square-o"}
+                  size={25}
+                  color={Colors[colorScheme ?? "light"].text}
+                />
+                <Text>{item.title}</Text>
+              </>
+            )}
+          </Pressable>
           <Pressable onLongPress={drag} disabled={isActive}>
             {({ pressed }) => (
               <FontAwesome
                 name="bars"
                 size={20}
                 color={Colors[colorScheme ?? "light"].placeholderText}
-                style={{ marginRight: 15, opacity: pressed || isActive ? 1 : 0.5 }}
+                style={{
+                  opacity: pressed || isActive ? 1 : 0.5,
+                  paddingVertical: 12.5,
+                  paddingHorizontal: 15,
+                }}
               />
             )}
           </Pressable>
@@ -83,6 +106,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderRadius: 4,
     borderWidth: 0.5,
-    paddingLeft: 10,
+  },
+  checkWrapper: {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    paddingLeft: 15,
+    flex: 1,
   },
 });

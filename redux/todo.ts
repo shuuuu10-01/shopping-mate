@@ -17,7 +17,7 @@ const todoSelectors = todoAdapter.getSelectors();
 const sampleSelector = createSelector(
   (state: State) => todoSelectors.selectAll(state.todo),
   (state) => {
-    return state.filter((s) => !s.completed);
+    return state.filter((s) => s.completed || !s.completed);
   },
 );
 
@@ -40,6 +40,9 @@ export const { actions, reducer } = createSlice({
     },
     setMany(state, action: PayloadAction<Todo[]>) {
       todoAdapter.setMany(state.todo, action.payload);
+    },
+    toggle(state, action: PayloadAction<Todo>) {
+      todoAdapter.setOne(state.todo, { ...action.payload, completed: !action.payload.completed });
     },
   },
 });
