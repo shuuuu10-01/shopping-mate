@@ -1,7 +1,6 @@
 import { Todo } from "@/types/todo";
 import { Text } from "./Themed";
 import { Pressable, StyleSheet, View } from "react-native";
-
 import DraggableFlatList, {
   ScaleDecorator,
   RenderItemParams,
@@ -36,8 +35,16 @@ export function TodoList() {
 
   const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
     return (
-      <ScaleDecorator>
-        <View style={[styles.item, { borderColor: Colors[colorScheme ?? "light"].border }]}>
+      <ScaleDecorator activeScale={1}>
+        <View
+          style={[
+            styles.item,
+            {
+              borderStyle: isActive ? "dotted" : "solid",
+              borderColor: Colors[colorScheme ?? "light"].border,
+            },
+          ]}
+        >
           <Pressable
             style={styles.checkWrapper}
             onPress={() => handleToggleCheck(item)}
