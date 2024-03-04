@@ -40,8 +40,8 @@ export function TodoList() {
               <FontAwesome
                 name="bars"
                 size={20}
-                color={Colors[colorScheme ?? "light"].text}
-                style={{ marginRight: 15, opacity: pressed || isActive ? 0.5 : 1 }}
+                color={Colors[colorScheme ?? "light"].placeholderText}
+                style={{ marginRight: 15, opacity: pressed || isActive ? 1 : 0.5 }}
               />
             )}
           </Pressable>
