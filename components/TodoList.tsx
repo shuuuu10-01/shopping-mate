@@ -9,8 +9,11 @@ import DraggableFlatList, {
 import { FontAwesome } from "@expo/vector-icons";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
 import { useMemo } from "react";
+import { useColorScheme } from "./useColorScheme";
+import Colors from "@/constants/Colors";
 
 export function TodoList() {
+  const colorScheme = useColorScheme();
   const todo = useAppSelector((state) => selectors.todo.sampleSelector(state.todo));
   const ordered = useMemo(() => {
     return [...todo].sort((a, b) => (a.order > b.order ? 1 : -1));
@@ -37,7 +40,7 @@ export function TodoList() {
               <FontAwesome
                 name="bars"
                 size={20}
-                color={"black"}
+                color={Colors[colorScheme ?? "light"].text}
                 style={{ marginRight: 15, opacity: pressed || isActive ? 0.5 : 1 }}
               />
             )}
