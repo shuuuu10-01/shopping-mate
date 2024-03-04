@@ -1,59 +1,85 @@
 import { Todo } from "@/types/todo";
 import { Text } from "./Themed";
-import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import DraggableFlatList, {
   ScaleDecorator,
   RenderItemParams,
 } from "react-native-draggable-flatlist";
 import { FontAwesome } from "@expo/vector-icons";
+import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
+import { useMemo } from "react";
 
-export function TodoList({ todo }: { todo: Todo[] }) {
+export function TodoList() {
+  const todo = useAppSelector((state) => selectors.todo.sampleSelector(state.todo));
+  const ordered = useMemo(() => {
+    return [...todo].sort((a, b) => (a.order > b.order ? 1 : -1));
+  }, [todo]);
+
+  const dispatch = useAppDispatch();
+  const handleDragEnd = (dragEndTodo: Todo[]) => {
+    const converted: Todo[] = dragEndTodo.map((d, index) => {
+      return {
+        ...d,
+        order: index,
+      };
+    });
+    dispatch(actions.todo.setMany(converted));
+  };
+
   const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
     return (
       <ScaleDecorator>
-        <TouchableOpacity activeOpacity={1} disabled={isActive} style={styles.item}>
+        <View style={styles.item}>
           <Text>{item.title}</Text>
-          <Pressable onTouchMove={drag}>
+          <Pressable onLongPress={drag} disabled={isActive}>
             {({ pressed }) => (
               <FontAwesome
-                name="plus"
-                size={30}
+                name="bars"
+                size={20}
                 color={"black"}
-                style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                style={{ marginRight: 15, opacity: pressed || isActive ? 0.5 : 1 }}
               />
             )}
           </Pressable>
-        </TouchableOpacity>
+        </View>
       </ScaleDecorator>
     );
   };
   return (
-    <View style={styles.container}>
-      <DraggableFlatList
-        data={todo}
-        onDragEnd={({ data }) => console.log(data)}
-        keyExtractor={(item) => item.id}
+    <View style={styles.wrapper}>
+      <DraggableFlatList<Todo>
+        data={ordered}
+        onDragEnd={({ data }) => handleDragEnd(data)}
+        keyExtractor={({ id }) => id}
         renderItem={Item}
+        style={styles.container}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+  },
   container: {
-    width: "90%",
-    paddingVertical: 30,
+    width: "80%",
+    padding: 0,
+    margin: 0,
   },
   item: {
     width: "100%",
     flex: 1,
     height: 50,
     display: "flex",
-    alignItems: "flex-start",
-    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     borderRadius: 4,
     borderWidth: 0.5,
-    paddingHorizontal: 10,
+    paddingLeft: 10,
   },
 });

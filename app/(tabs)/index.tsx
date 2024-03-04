@@ -45,7 +45,7 @@ export default function TabOneScreen() {
           />
         )}
       </Pressable>
-      <TodoList todo={todo} />
+      <TodoList />
     </View>
   );
 }
