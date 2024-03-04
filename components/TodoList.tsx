@@ -37,7 +37,7 @@ export function TodoList() {
   const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
     return (
       <ScaleDecorator>
-        <View style={styles.item}>
+        <View style={[styles.item, { borderColor: Colors[colorScheme ?? "light"].border }]}>
           <Pressable
             style={styles.checkWrapper}
             onPress={() => handleToggleCheck(item)}
