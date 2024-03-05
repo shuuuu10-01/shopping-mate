@@ -7,6 +7,7 @@ import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
 import { TodoList } from "@/components/TodoList";
+import { Link } from "expo-router";
 
 export default function TabOneScreen() {
   const todo = useAppSelector((state) => selectors.todo.sampleSelector(state.todo));
@@ -19,6 +20,7 @@ export default function TabOneScreen() {
     dispatch(
       actions.todo.add({
         title: title,
+        categoryId: "1",
         completed: false,
       }),
     );
@@ -46,12 +48,25 @@ export default function TabOneScreen() {
         )}
       </Pressable>
       <TodoList />
+      <Link href="/modal" asChild>
+        <Pressable style={styles.add}>
+          {({ pressed }) => (
+            <FontAwesome
+              name="plus-circle"
+              size={60}
+              color={Colors[colorScheme ?? "light"].text}
+              style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+            />
+          )}
+        </Pressable>
+      </Link>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    position: "relative",
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
@@ -63,5 +78,10 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 0.5,
     borderRadius: 4,
+  },
+  add: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
   },
 });
