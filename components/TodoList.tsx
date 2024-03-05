@@ -61,7 +61,18 @@ export function TodoList() {
               </>
             )}
           </Pressable>
-          <Pressable onLongPress={drag} disabled={isActive}>
+          <Pressable
+            onLongPress={drag}
+            disabled={isActive}
+            style={{
+              display: "flex",
+              width: 35,
+              height: "100%",
+              paddingRight: 15,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             {({ pressed }) => (
               <FontAwesome
                 name="bars"
@@ -69,8 +80,6 @@ export function TodoList() {
                 color={Colors[colorScheme ?? "light"].placeholderText}
                 style={{
                   opacity: pressed || isActive ? 1 : 0.5,
-                  paddingVertical: 12.5,
-                  paddingHorizontal: 15,
                 }}
               />
             )}
@@ -114,7 +123,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderRadius: 4,
     borderWidth: 0.5,
-    gap: 15,
+    gap: 35,
   },
   checkWrapper: {
     width: "100%",
