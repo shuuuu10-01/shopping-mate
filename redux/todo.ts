@@ -31,7 +31,7 @@ export const { actions, reducer } = createSlice({
     todo: todoAdapter.getInitialState(),
   } as State,
   reducers: {
-    pushTodo(state, action: PayloadAction<Omit<Todo, "id" | "order">>) {
+    add(state, action: PayloadAction<Omit<Todo, "id" | "order">>) {
       todoAdapter.addOne(state.todo, {
         ...action.payload,
         id: uuidv4(),

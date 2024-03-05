@@ -17,7 +17,7 @@ export default function TabOneScreen() {
   const handlePress = () => {
     if (title === "") return;
     dispatch(
-      actions.todo.pushTodo({
+      actions.todo.add({
         title: title,
         completed: false,
       }),
