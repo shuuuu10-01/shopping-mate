@@ -106,13 +106,15 @@ const styles = StyleSheet.create({
   item: {
     width: "100%",
     flex: 1,
-    height: 50,
+    minHeight: 50,
+    paddingVertical: 5,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     borderRadius: 4,
     borderWidth: 0.5,
+    gap: 15,
   },
   checkWrapper: {
     width: "100%",
