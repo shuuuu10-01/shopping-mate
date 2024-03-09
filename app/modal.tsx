@@ -29,14 +29,21 @@ export default function ModalScreen() {
 
   const categoryName = useMemo(() => {
     const find = CATEGORIES.find((c) => c.id === category);
-    return find?.name || "未選択";
+    return find?.name || "カテゴリー未選択";
   }, [category]);
 
   return (
     <View style={styles.container}>
+      <View style={styles.close}></View>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Todoの追加</Text>
+      </View>
+      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <View style={styles.pickerLabel}>
         <Text style={styles.labelTitle}>カテゴリー</Text>
-        <Text style={styles.categoryName}>{categoryName}</Text>
+        <View style={[styles.categoryName, { backgroundColor: "rgba(118,118,128,0.12)" }]}>
+          <Text style={{ fontSize: 16 }}>{categoryName}</Text>
+        </View>
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <Picker
@@ -90,7 +97,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingTop: 20,
+  },
+  close: {
+    width: 36,
+    height: 5,
+    marginTop: 5,
+    marginBottom: 4,
+    borderRadius: 2.5,
+    backgroundColor: "#3C3C43",
+  },
+  header: { display: "flex", justifyContent: "center", alignItems: "center", height: 44 },
+  headerTitle: {
+    fontSize: 17,
+    fontWeight: "600",
   },
   pickerLabel: {
     display: "flex",
@@ -98,10 +117,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "90%",
+    height: 44,
   },
   labelTitle: { fontSize: 16 },
   categoryName: {
-    fontSize: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 11,
+    borderRadius: 6,
   },
   input: {
     width: "80%",
@@ -116,8 +138,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   separator: {
-    marginVertical: 10,
     height: 1,
-    width: "90%",
+    width: "100%",
   },
 });
