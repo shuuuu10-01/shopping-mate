@@ -3,7 +3,6 @@ import { Platform, Pressable, StyleSheet, useColorScheme } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
 import { Text, TextInput, View } from "@/components/Themed";
-import { FontAwesome } from "@expo/vector-icons";
 import { actions, useAppDispatch } from "@/redux";
 import { useMemo, useState } from "react";
 import Colors from "@/constants/Colors";
@@ -36,7 +35,7 @@ export default function ModalScreen() {
     <View style={styles.container}>
       <View style={styles.close}></View>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Todoの追加</Text>
+        <Text style={styles.headerTitle}>タスクの追加</Text>
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <View style={styles.pickerLabel}>
@@ -68,7 +67,7 @@ export default function ModalScreen() {
       </Picker>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <View style={styles.titleLabel}>
-        <Text>タイトル</Text>
+        <Text>商品名</Text>
         <TextInput
           style={styles.titleInput}
           value={name}
@@ -81,12 +80,16 @@ export default function ModalScreen() {
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <Pressable onPress={handlePress}>
         {({ pressed }) => (
-          <FontAwesome
-            name="plus"
-            size={30}
-            color={Colors[colorScheme ?? "light"].text}
-            style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-          />
+          <View style={styles.addButton}>
+            <Text
+              style={{
+                fontSize: 18,
+                opacity: pressed ? 0.5 : 1,
+              }}
+            >
+              追加する
+            </Text>
+          </View>
         )}
       </Pressable>
 
@@ -139,6 +142,13 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 12,
     height: 40,
+  },
+  addButton: {
+    marginTop: 30,
+    paddingVertical: 6,
+    paddingHorizontal: 20,
+    borderRadius: 6,
+    backgroundColor: "rgba(118,118,128,0.12)",
   },
   separator: {
     height: 1,
