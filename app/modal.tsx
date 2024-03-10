@@ -40,12 +40,11 @@ export default function ModalScreen() {
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <View style={styles.pickerLabel}>
-        <Text style={styles.labelTitle}>カテゴリー</Text>
+        <Text>カテゴリー</Text>
         <View style={[styles.categoryName, { backgroundColor: "rgba(118,118,128,0.12)" }]}>
-          <Text style={{ fontSize: 16 }}>{categoryName}</Text>
+          <Text>{categoryName}</Text>
         </View>
       </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <Picker
         style={{ width: "100%" }}
         selectedValue={category}
@@ -67,14 +66,19 @@ export default function ModalScreen() {
           );
         })}
       </Picker>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-        blurOnSubmit
-        enterKeyHint="done"
-        placeholder="TODOを入力してください"
-      />
+      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={styles.titleLabel}>
+        <Text>タイトル</Text>
+        <TextInput
+          style={styles.titleInput}
+          value={name}
+          onChangeText={setName}
+          blurOnSubmit
+          enterKeyHint="done"
+          placeholder="タイトルを入力してください"
+        ></TextInput>
+      </View>
+      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <Pressable onPress={handlePress}>
         {({ pressed }) => (
           <FontAwesome
@@ -119,23 +123,22 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 44,
   },
-  labelTitle: { fontSize: 16 },
   categoryName: {
     paddingVertical: 6,
     paddingHorizontal: 11,
     borderRadius: 6,
   },
-  input: {
-    width: "80%",
-    height: 40,
+  titleLabel: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    width: "90%",
+    height: 44,
+  },
+  titleInput: {
     padding: 10,
     margin: 12,
-    borderWidth: 0.5,
-    borderRadius: 4,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
+    height: 40,
   },
   separator: {
     height: 1,
