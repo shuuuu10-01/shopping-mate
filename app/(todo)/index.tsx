@@ -21,7 +21,7 @@ export default function HomeScreen() {
               name="plus-circle"
               size={60}
               color={Colors[colorScheme ?? "light"].text}
-              style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+              style={{ opacity: pressed ? 0.5 : 1 }}
             />
           )}
         </Pressable>
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   add: {
     position: "absolute",
-    bottom: 20,
-    right: 20,
+    bottom: 35,
+    right: 35,
   },
 });
