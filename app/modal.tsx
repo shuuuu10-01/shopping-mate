@@ -7,12 +7,14 @@ import { actions, useAppDispatch } from "@/redux";
 import { useMemo, useState } from "react";
 import Colors from "@/constants/Colors";
 import { CATEGORIES } from "@/constants/category";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ModalScreen() {
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const colorScheme = useColorScheme();
+  const navigate = useNavigation();
 
   const handlePress = () => {
     if (name === "") return;
@@ -24,6 +26,7 @@ export default function ModalScreen() {
       }),
     );
     setName("");
+    navigate.goBack();
   };
 
   const categoryName = useMemo(() => {
