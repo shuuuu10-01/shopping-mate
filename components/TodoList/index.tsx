@@ -1,5 +1,5 @@
 import { Todo } from "@/types/todo";
-import { Text } from "./Themed";
+import { Text } from "@/components/Themed";
 import { Pressable, StyleSheet, View } from "react-native";
 import {
   ScaleDecorator,
