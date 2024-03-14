@@ -18,7 +18,9 @@ export function TodoCategory({ category }: { category: Category }) {
     dispatch(actions.todo.setMany(converted));
   };
 
-  const items = useAppSelector((state) => selectors.todo.sampleSelector(state.todo));
+  const items = useAppSelector((state) =>
+    selectors.todo.sortedTodoByCategoryId(state.todo, category.id),
+  );
   return (
     <>
       <Text style={styles.categoryName}>{category.name}</Text>
