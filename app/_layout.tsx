@@ -5,7 +5,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
-import { useColorScheme } from "@/components/useColorScheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { persistor, store } from "@/redux";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";

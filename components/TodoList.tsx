@@ -8,7 +8,7 @@ import DraggableFlatList, {
 import { FontAwesome } from "@expo/vector-icons";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
 import { useMemo } from "react";
-import { useColorScheme } from "./useColorScheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import Colors from "@/constants/Colors";
 
 export function TodoList() {

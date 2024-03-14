@@ -4,7 +4,7 @@ import { View } from "@/components/Themed";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
-import { useColorScheme } from "@/components/useColorScheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { TodoList } from "@/components/TodoList";
 import { Link } from "expo-router";
 
