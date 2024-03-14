@@ -24,9 +24,11 @@ export function TodoCategory({
     dispatch(actions.todo.setMany(converted));
   };
 
-  const items = useAppSelector((state) =>
-    selectors.todo.sortedTodoByCategoryId(state.todo, category?.id || ""),
-  );
+  const items = useAppSelector((state) => {
+    if (completed) return selectors.todo.completedTodo(state.todo);
+
+    return selectors.todo.sortedTodoByCategoryId(state.todo, category?.id || "");
+  });
 
   const categoryName = () => {
     if (category) return category.name;
