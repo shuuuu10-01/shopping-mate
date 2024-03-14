@@ -21,11 +21,12 @@ export default function ModalScreen() {
     dispatch(
       actions.todo.add({
         title: name,
-        categoryId: "1",
+        categoryId: category,
         completed: false,
       }),
     );
     setName("");
+    setCategory("");
     navigate.goBack();
   };
 
