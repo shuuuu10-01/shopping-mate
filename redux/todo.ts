@@ -23,8 +23,16 @@ const sortedTodoByCategoryId = createSelector(
   },
 );
 
+const completedTodo = createSelector(
+  (state: State) => todoSelectors.selectAll(state.todo),
+  (state) => {
+    return state.filter((s) => s.completed);
+  },
+);
+
 export const selectors = {
   sortedTodoByCategoryId,
+  completedTodo,
 };
 
 export const { actions, reducer } = createSlice({
