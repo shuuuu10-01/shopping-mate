@@ -18,7 +18,7 @@ const sortedTodoByCategoryId = createSelector(
   (state: State) => todoSelectors.selectAll(state.todo),
   (_state: State, categoryId: Todo["categoryId"]) => categoryId,
   (state, categoryId) => {
-    const filtered = state.filter((s) => s.categoryId === categoryId);
+    const filtered = state.filter((s) => !s.completed && s.categoryId === categoryId);
     return filtered.sort((a, b) => (a.order > b.order ? 1 : -1));
   },
 );
