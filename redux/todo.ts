@@ -14,15 +14,17 @@ const todoAdapter = createEntityAdapter({
 
 const todoSelectors = todoAdapter.getSelectors();
 
-const sampleSelector = createSelector(
+const sortedTodoByCategoryId = createSelector(
   (state: State) => todoSelectors.selectAll(state.todo),
-  (state) => {
-    return state.filter((s) => s.completed || !s.completed);
+  (_state: State, categoryId: Todo["categoryId"]) => categoryId,
+  (state, categoryId) => {
+    const filtered = state.filter((s) => s.categoryId === categoryId);
+    return filtered.sort((a, b) => (a.order > b.order ? 1 : -1));
   },
 );
 
 export const selectors = {
-  sampleSelector,
+  sortedTodoByCategoryId,
 };
 
 export const { actions, reducer } = createSlice({
