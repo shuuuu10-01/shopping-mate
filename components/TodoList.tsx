@@ -1,15 +1,18 @@
 import { Todo } from "@/types/todo";
 import { Text } from "./Themed";
 import { Pressable, StyleSheet, View } from "react-native";
-import DraggableFlatList, {
+import {
   ScaleDecorator,
   RenderItemParams,
+  NestableDraggableFlatList,
+  NestableScrollContainer,
 } from "react-native-draggable-flatlist";
 import { FontAwesome } from "@expo/vector-icons";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
 import { useMemo } from "react";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import Colors from "@/constants/Colors";
+import { CATEGORIES } from "@/constants/category";
 
 export function TodoList() {
   const colorScheme = useColorScheme();
@@ -90,27 +93,40 @@ export function TodoList() {
   };
   return (
     <View style={styles.wrapper}>
-      <DraggableFlatList<Todo>
-        data={ordered}
-        onDragEnd={({ data }) => handleDragEnd(data)}
-        keyExtractor={({ id }) => id}
-        renderItem={Item}
-        style={styles.container}
-      />
+      <NestableScrollContainer>
+        {CATEGORIES.map((c) => {
+          return (
+            <>
+              <Text style={styles.categoryName}>{c.name}</Text>
+              <NestableDraggableFlatList<Todo>
+                data={ordered}
+                onDragEnd={({ data }) => handleDragEnd(data)}
+                keyExtractor={({ id }) => id}
+                renderItem={Item}
+                style={styles.container}
+              />
+            </>
+          );
+        })}
+      </NestableScrollContainer>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    width: "100%",
+    width: "80%",
     display: "flex",
     alignItems: "center",
   },
+  categoryName: {
+    fontSize: 18,
+    marginBottom: 5,
+  },
   container: {
-    width: "80%",
+    width: "100%",
     padding: 0,
-    margin: 0,
+    marginBottom: 20,
   },
   item: {
     width: "100%",
