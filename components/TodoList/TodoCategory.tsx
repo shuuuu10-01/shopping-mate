@@ -1,4 +1,4 @@
-import { Category } from "@/types/categry";
+import { Category } from "@/types/category";
 import { Text } from "../Themed";
 import { StyleSheet } from "react-native";
 import { NestableDraggableFlatList } from "react-native-draggable-flatlist";
