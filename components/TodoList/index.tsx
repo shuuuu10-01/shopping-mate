@@ -10,6 +10,8 @@ export function TodoList() {
         {CATEGORIES.map((c) => {
           return <TodoCategory key={c.id} category={c} />;
         })}
+        <TodoCategory category={undefined} />
+        <TodoCategory completed />
       </NestableScrollContainer>
     </View>
   );

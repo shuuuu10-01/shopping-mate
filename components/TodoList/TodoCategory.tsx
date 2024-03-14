@@ -6,7 +6,13 @@ import { Todo } from "@/types/todo";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
 import { Item } from "./Item";
 
-export function TodoCategory({ category }: { category: Category }) {
+export function TodoCategory({
+  category,
+  completed = false,
+}: {
+  category?: Category;
+  completed?: Todo["completed"];
+}) {
   const dispatch = useAppDispatch();
   const handleDragEnd = (dragEndTodo: Todo[]) => {
     const converted: Todo[] = dragEndTodo.map((d, index) => {
@@ -19,11 +25,20 @@ export function TodoCategory({ category }: { category: Category }) {
   };
 
   const items = useAppSelector((state) =>
-    selectors.todo.sortedTodoByCategoryId(state.todo, category.id),
+    selectors.todo.sortedTodoByCategoryId(state.todo, category?.id || ""),
   );
+
+  const categoryName = () => {
+    if (category) return category.name;
+    return completed ? "完了済み" : "カテゴリー未選択";
+  };
+
+  // 完了済み かつ 0件の場合は表示しない
+  if (completed && items.length === 0) return;
+
   return (
     <>
-      <Text style={styles.categoryName}>{category.name}</Text>
+      <Text style={styles.categoryName}>{categoryName()}</Text>
       <NestableDraggableFlatList<Todo>
         data={items}
         onDragEnd={({ data }) => handleDragEnd(data)}
