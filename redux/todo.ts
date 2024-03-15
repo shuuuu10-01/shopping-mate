@@ -58,5 +58,8 @@ export const { actions, reducer } = createSlice({
     edit(state, action: PayloadAction<Todo>) {
       todoAdapter.setOne(state.todo, action.payload);
     },
+    delete(state, action: PayloadAction<Todo["id"]>) {
+      todoAdapter.removeOne(state.todo, action.payload);
+    },
   },
 });

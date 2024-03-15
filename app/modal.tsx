@@ -23,7 +23,13 @@ export default function ModalScreen() {
   const navigate = useNavigation();
   const isEdit = !!id;
 
-  const handlePress = () => {
+  const reset = () => {
+    setName("");
+    setCategory("");
+    navigate.goBack();
+  };
+
+  const handleAdd = () => {
     if (name === "") return;
     if (isEdit) {
       dispatch(actions.todo.edit({ ...originTodo, title: name, categoryId: category }));
@@ -36,9 +42,12 @@ export default function ModalScreen() {
         }),
       );
     }
-    setName("");
-    setCategory("");
-    navigate.goBack();
+    reset();
+  };
+
+  const handleDelete = () => {
+    dispatch(actions.todo.delete(id));
+    reset();
   };
 
   const categoryName = useMemo(() => {
@@ -99,7 +108,7 @@ export default function ModalScreen() {
         ></TextInput>
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <Pressable onPress={handlePress}>
+      <Pressable onPress={handleAdd}>
         {({ pressed }) => (
           <View style={styles.addButton}>
             <Text
@@ -114,7 +123,7 @@ export default function ModalScreen() {
         )}
       </Pressable>
       {isEdit && (
-        <Pressable style={styles.delete}>
+        <Pressable style={styles.delete} onPress={handleDelete}>
           {({ pressed }) => (
             <FontAwesome
               name="trash"
