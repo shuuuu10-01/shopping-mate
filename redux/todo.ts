@@ -31,6 +31,7 @@ const completedTodo = createSelector(
 );
 
 export const selectors = {
+  todoSelectors,
   sortedTodoByCategoryId,
   completedTodo,
 };
@@ -53,6 +54,9 @@ export const { actions, reducer } = createSlice({
     },
     toggle(state, action: PayloadAction<Todo>) {
       todoAdapter.setOne(state.todo, { ...action.payload, completed: !action.payload.completed });
+    },
+    edit(state, action: PayloadAction<Todo>) {
+      todoAdapter.setOne(state.todo, action.payload);
     },
   },
 });
