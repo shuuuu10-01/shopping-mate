@@ -6,6 +6,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { Pressable, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { actions, useAppDispatch } from "@/redux";
+import { router } from "expo-router";
 
 export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
   const colorScheme = useColorScheme();
@@ -25,22 +26,23 @@ export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
           },
         ]}
       >
-        <Pressable
-          style={styles.checkWrapper}
-          onPress={() => handleToggleCheck(item)}
-          disabled={isActive}
-        >
-          {() => (
-            <>
+        <View style={styles.checkWrapper}>
+          <Pressable onPress={() => handleToggleCheck(item)} disabled={isActive}>
+            {() => (
               <FontAwesome
                 name={item.completed ? "check-square" : "square-o"}
                 size={25}
                 color={Colors[colorScheme ?? "light"].text}
               />
-              <Text>{item.title}</Text>
-            </>
-          )}
-        </Pressable>
+            )}
+          </Pressable>
+          <Pressable
+            onPress={() => router.push({ pathname: "/modal", params: { id: item.id } })}
+            disabled={isActive}
+          >
+            <Text>{item.title}</Text>
+          </Pressable>
+        </View>
         <Pressable onLongPress={drag} disabled={isActive} style={styles.dragButton}>
           {({ pressed }) => (
             <FontAwesome
