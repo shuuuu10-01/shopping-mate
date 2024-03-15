@@ -35,8 +35,8 @@ export function TodoCategory({
     return completed ? "完了済み" : "カテゴリー未選択";
   };
 
-  // 完了済み かつ 0件の場合は表示しない
-  if (completed && items.length === 0) return;
+  // 完了済みやカテゴリー未選択 かつ 0件の場合は表示しない
+  if ((completed || category === undefined) && items.length === 0) return;
 
   return (
     <>
