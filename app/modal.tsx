@@ -9,6 +9,7 @@ import Colors from "@/constants/Colors";
 import { CATEGORIES } from "@/constants/category";
 import { useNavigation } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
+import { FontAwesome } from "@expo/vector-icons";
 
 export default function ModalScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -20,14 +21,13 @@ export default function ModalScreen() {
   const [category, setCategory] = useState("");
   const colorScheme = useColorScheme();
   const navigate = useNavigation();
+  const isEdit = !!id;
 
   const handlePress = () => {
     if (name === "") return;
-    if (id) {
-      // edit
+    if (isEdit) {
       dispatch(actions.todo.edit({ ...originTodo, title: name, categoryId: category }));
     } else {
-      // add
       dispatch(
         actions.todo.add({
           title: name,
@@ -47,7 +47,7 @@ export default function ModalScreen() {
   }, [category]);
 
   useEffect(() => {
-    if (!id) return;
+    if (!isEdit) return;
     setCategory(originTodo.categoryId);
     setName(originTodo.title);
   }, [id]);
@@ -113,6 +113,18 @@ export default function ModalScreen() {
           </View>
         )}
       </Pressable>
+      {isEdit && (
+        <Pressable style={styles.delete}>
+          {({ pressed }) => (
+            <FontAwesome
+              name="trash"
+              size={30}
+              color="#fff"
+              style={{ opacity: pressed ? 0.5 : 1 }}
+            />
+          )}
+        </Pressable>
+      )}
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
@@ -174,5 +186,17 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     width: "100%",
+  },
+  delete: {
+    position: "absolute",
+    bottom: 35,
+    right: 35,
+    backgroundColor: "red",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
