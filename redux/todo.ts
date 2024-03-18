@@ -18,7 +18,7 @@ const sortedTodoByCategoryId = createSelector(
   (state: State) => todoSelectors.selectAll(state.todo),
   (_state: State, categoryId: Todo["categoryId"]) => categoryId,
   (state, categoryId) => {
-    const filtered = state.filter((s) => s.categoryId === categoryId);
+    const filtered = state.filter((s) => !s.completed && s.categoryId === categoryId);
     return filtered.sort((a, b) => (a.order > b.order ? 1 : -1));
   },
 );
@@ -31,6 +31,7 @@ const completedTodo = createSelector(
 );
 
 export const selectors = {
+  todoSelectors,
   sortedTodoByCategoryId,
   completedTodo,
 };
@@ -53,6 +54,12 @@ export const { actions, reducer } = createSlice({
     },
     toggle(state, action: PayloadAction<Todo>) {
       todoAdapter.setOne(state.todo, { ...action.payload, completed: !action.payload.completed });
+    },
+    edit(state, action: PayloadAction<Todo>) {
+      todoAdapter.setOne(state.todo, action.payload);
+    },
+    delete(state, action: PayloadAction<Todo["id"]>) {
+      todoAdapter.removeOne(state.todo, action.payload);
     },
   },
 });

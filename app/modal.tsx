@@ -3,31 +3,51 @@ import { Platform, Pressable, StyleSheet, useColorScheme } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
 import { Text, TextInput, View } from "@/components/Themed";
-import { actions, useAppDispatch } from "@/redux";
-import { useMemo, useState } from "react";
+import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
+import { useEffect, useMemo, useState } from "react";
 import Colors from "@/constants/Colors";
 import { CATEGORIES } from "@/constants/category";
 import { useNavigation } from "@react-navigation/native";
+import { useLocalSearchParams } from "expo-router";
+import { FontAwesome } from "@expo/vector-icons";
 
 export default function ModalScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const originTodo = useAppSelector((state) =>
+    selectors.todo.todoSelectors.selectById(state.todo.todo, id),
+  );
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const colorScheme = useColorScheme();
   const navigate = useNavigation();
+  const isEdit = !!id;
 
-  const handlePress = () => {
-    if (name === "") return;
-    dispatch(
-      actions.todo.add({
-        title: name,
-        categoryId: category,
-        completed: false,
-      }),
-    );
+  const reset = () => {
     setName("");
     setCategory("");
     navigate.goBack();
+  };
+
+  const handleAdd = () => {
+    if (name === "") return;
+    if (isEdit) {
+      dispatch(actions.todo.edit({ ...originTodo, title: name, categoryId: category }));
+    } else {
+      dispatch(
+        actions.todo.add({
+          title: name,
+          categoryId: category,
+          completed: false,
+        }),
+      );
+    }
+    reset();
+  };
+
+  const handleDelete = () => {
+    dispatch(actions.todo.delete(id));
+    reset();
   };
 
   const categoryName = useMemo(() => {
@@ -35,11 +55,17 @@ export default function ModalScreen() {
     return find?.name || "カテゴリー未選択";
   }, [category]);
 
+  useEffect(() => {
+    if (!isEdit) return;
+    setCategory(originTodo.categoryId);
+    setName(originTodo.title);
+  }, [id]);
+
   return (
     <View style={styles.container}>
       <View style={styles.close}></View>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>タスクの追加</Text>
+        <Text style={styles.headerTitle}> {id ? "タスクの編集" : "タスクの追加"}</Text>
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <View style={styles.pickerLabel}>
@@ -82,7 +108,7 @@ export default function ModalScreen() {
         ></TextInput>
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <Pressable onPress={handlePress}>
+      <Pressable onPress={handleAdd}>
         {({ pressed }) => (
           <View style={styles.addButton}>
             <Text
@@ -91,11 +117,23 @@ export default function ModalScreen() {
                 opacity: pressed ? 0.5 : 1,
               }}
             >
-              追加する
+              {id ? "変更する" : "追加する"}
             </Text>
           </View>
         )}
       </Pressable>
+      {isEdit && (
+        <Pressable style={styles.delete} onPress={handleDelete}>
+          {({ pressed }) => (
+            <FontAwesome
+              name="trash"
+              size={30}
+              color="#fff"
+              style={{ opacity: pressed ? 0.5 : 1 }}
+            />
+          )}
+        </Pressable>
+      )}
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
@@ -157,5 +195,17 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     width: "100%",
+  },
+  delete: {
+    position: "absolute",
+    bottom: 35,
+    right: 35,
+    backgroundColor: "red",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
