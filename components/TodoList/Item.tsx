@@ -27,18 +27,21 @@ export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
         ]}
       >
         <View style={styles.checkWrapper}>
-          <Pressable onPress={() => handleToggleCheck(item)} disabled={isActive}>
-            {() => (
-              <FontAwesome
-                name={item.completed ? "check-square" : "square-o"}
-                size={25}
-                color={Colors[colorScheme ?? "light"].text}
-              />
-            )}
+          <Pressable
+            style={styles.checkbox}
+            disabled={isActive}
+            onPress={() => handleToggleCheck(item)}
+          >
+            <FontAwesome
+              name={item.completed ? "check-square" : "square-o"}
+              size={25}
+              color={Colors[colorScheme ?? "light"].text}
+            />
           </Pressable>
           <Pressable
             onPress={() => router.push({ pathname: "/modal", params: { id: item.id } })}
             disabled={isActive}
+            style={styles.title}
           >
             <Text>{item.title}</Text>
           </Pressable>
@@ -65,24 +68,37 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 1,
     minHeight: 50,
-    paddingVertical: 5,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     borderRadius: 4,
     borderWidth: 0.5,
-    gap: 35,
+    gap: 15,
+    overflow: "hidden",
   },
   checkWrapper: {
-    width: "100%",
+    flex: 1,
     height: "100%",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    paddingVertical: 5,
+  },
+  checkbox: {
+    width: 50,
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     paddingLeft: 15,
+    paddingRight: 10,
+  },
+  title: {
+    display: "flex",
+    justifyContent: "center",
     flex: 1,
+    height: "100%",
   },
   dragButton: {
     display: "flex",
