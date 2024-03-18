@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 import Colors from "@/constants/Colors";
-import { useColorScheme } from "./useColorScheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 type ThemeProps = {
   lightColor?: string;
@@ -39,15 +39,12 @@ export function Text(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
 
-  return <DefaultText style={[{ color }, style]} {...otherProps} />;
+  return <DefaultText style={[{ color, fontSize: 16 }, style]} {...otherProps} />;
 }
 
 export function View(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "background",
-  );
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, "background");
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
@@ -61,7 +58,7 @@ export function TextInput(props: TextInputProps) {
 
   return (
     <DefaultTextInput
-      style={[{ color, backgroundColor, borderColor }, style]}
+      style={[{ color, backgroundColor, borderColor, fontSize: 16 }, style]}
       placeholderTextColor={placeholderTextColor}
       {...otherProps}
     />
