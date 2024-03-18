@@ -46,18 +46,23 @@ export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
             <Text>{item.title}</Text>
           </Pressable>
         </View>
-        <Pressable onLongPress={drag} disabled={isActive} style={styles.dragButton}>
-          {({ pressed }) => (
-            <FontAwesome
-              name="bars"
-              size={20}
-              color={Colors[colorScheme ?? "light"].placeholderText}
-              style={{
-                opacity: pressed || isActive ? 1 : 0.5,
-              }}
-            />
-          )}
-        </Pressable>
+        {/* 完了済みの場合はソートボタンは非表示 */}
+        {item.completed ? (
+          <View style={styles.dragButton}></View>
+        ) : (
+          <Pressable onLongPress={drag} disabled={isActive} style={styles.dragButton}>
+            {({ pressed }) => (
+              <FontAwesome
+                name="bars"
+                size={20}
+                color={Colors[colorScheme ?? "light"].placeholderText}
+                style={{
+                  opacity: pressed || isActive ? 1 : 0.5,
+                }}
+              />
+            )}
+          </Pressable>
+        )}
       </View>
     </ScaleDecorator>
   );
