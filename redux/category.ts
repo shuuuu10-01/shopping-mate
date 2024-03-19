@@ -1,5 +1,6 @@
+import { CATEGORIES } from "@/constants/category";
 import { Category, SerializedCategory } from "@/types/category";
-import { PayloadAction, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createEntityAdapter, createSelector, createSlice } from "@reduxjs/toolkit";
 
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
@@ -14,14 +15,22 @@ const categoryAdapter = createEntityAdapter({
 
 const categorySelectors = categoryAdapter.getSelectors();
 
+const sortedCategories = createSelector(
+  (state: State) => categorySelectors.selectAll(state.categories),
+  (state) => {
+    return state.sort((a, b) => (a.order > b.order ? 1 : -1));
+  },
+);
+
 export const selectors = {
   categorySelectors,
+  sortedCategories,
 };
 
 export const { actions, reducer } = createSlice({
   name: "category",
   initialState: {
-    categories: categoryAdapter.getInitialState(),
+    categories: categoryAdapter.getInitialState({}, CATEGORIES),
   } as State,
   reducers: {
     add(state, action: PayloadAction<Omit<Category, "id" | "order">>) {
