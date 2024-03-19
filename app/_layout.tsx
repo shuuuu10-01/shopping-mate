@@ -58,6 +58,7 @@ function RootLayoutNav() {
           <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
             <Stack>
               <Stack.Screen name="(todo)" options={{ headerShown: false }} />
+              <Stack.Screen name="(settings)" options={{ headerShown: false }} />
               <Stack.Screen
                 name="modal"
                 options={{
