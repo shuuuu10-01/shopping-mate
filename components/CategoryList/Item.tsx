@@ -4,7 +4,7 @@ import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Pressable, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { Link } from "expo-router";
 import React from "react";
 import { Category } from "@/types/category";
 
@@ -22,22 +22,16 @@ export const Item = ({ item, drag, isActive }: RenderItemParams<Category>) => {
           },
         ]}
       >
-        <View style={styles.circleWrapper}>
-          <View
-            style={[styles.circle, { borderColor: Colors[colorScheme ?? "light"].border }]}
-            lightColor={item.color}
-            darkColor={item.color}
-          ></View>
-          <Pressable
-            onPress={() =>
-              router.push({ pathname: "/(settings)/category-modal", params: { id: item.id } })
-            }
-            disabled={isActive}
-            style={styles.title}
-          >
+        <Link asChild href={{ pathname: "/(settings)/category-modal", params: { id: item.id } }}>
+          <Pressable disabled={isActive} style={styles.circleWrapper}>
+            <View
+              style={[styles.circle, { borderColor: Colors[colorScheme ?? "light"].border }]}
+              lightColor={item.color}
+              darkColor={item.color}
+            ></View>
             <Text>{item.name}</Text>
           </Pressable>
-        </View>
+        </Link>
 
         <Pressable onLongPress={drag} disabled={isActive} style={styles.dragButton}>
           {({ pressed }) => (
@@ -81,20 +75,11 @@ const styles = StyleSheet.create({
   circle: {
     width: 20,
     height: 20,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
     borderRadius: 10,
     borderWidth: 0.5,
     borderStyle: "solid",
     marginLeft: 15,
     marginRight: 10,
-  },
-  title: {
-    display: "flex",
-    justifyContent: "center",
-    flex: 1,
-    height: "100%",
   },
   dragButton: {
     display: "flex",
