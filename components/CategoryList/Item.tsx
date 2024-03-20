@@ -22,10 +22,12 @@ export const Item = ({ item, drag, isActive }: RenderItemParams<Category>) => {
           },
         ]}
       >
-        <View style={styles.checkWrapper}>
-          <View style={styles.checkbox}>
-            <FontAwesome name="circle" size={20} color={item.color} />
-          </View>
+        <View style={styles.circleWrapper}>
+          <View
+            style={[styles.circle, { borderColor: Colors[colorScheme ?? "light"].border }]}
+            lightColor={item.color}
+            darkColor={item.color}
+          ></View>
           <Pressable
             onPress={() =>
               router.push({ pathname: "/(settings)/category-modal", params: { id: item.id } })
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
     gap: 15,
     overflow: "hidden",
   },
-  checkWrapper: {
+  circleWrapper: {
     flex: 1,
     height: "100%",
     display: "flex",
@@ -76,14 +78,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 5,
   },
-  checkbox: {
-    width: 50,
-    height: "100%",
+  circle: {
+    width: 20,
+    height: 20,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    paddingLeft: 15,
-    paddingRight: 10,
+    borderRadius: 10,
+    borderWidth: 0.5,
+    borderStyle: "solid",
+    marginLeft: 15,
+    marginRight: 10,
   },
   title: {
     display: "flex",
