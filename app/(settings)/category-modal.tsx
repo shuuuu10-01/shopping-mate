@@ -3,10 +3,11 @@ import { Platform, Pressable, StyleSheet } from "react-native";
 
 import { Text, TextInput, View } from "@/components/Themed";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
+import ColorPicker from "react-native-color-picker-ios";
 
 export default function CategoryModalScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -15,6 +16,7 @@ export default function CategoryModalScreen() {
   );
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
+  const [color, setColor] = useState("");
   const navigate = useNavigation();
   const isEdit = !!id;
 
@@ -43,9 +45,16 @@ export default function CategoryModalScreen() {
     reset();
   };
 
+  const handlePress = useCallback(() => {
+    ColorPicker.showColorPicker({ supportsAlpha: true, initialColor: color }, (color) => {
+      setColor(color);
+    });
+  }, [color]);
+
   useEffect(() => {
     if (!isEdit) return;
     setName(originCategory.name);
+    setColor(originCategory.color);
   }, [id]);
 
   return (
@@ -65,6 +74,16 @@ export default function CategoryModalScreen() {
           enterKeyHint="done"
           placeholder="カテゴリー名を入力してください"
         ></TextInput>
+      </View>
+      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={styles.colorLabel}>
+        <Text>カラー</Text>
+        <Pressable onPress={handlePress} style={styles.color}>
+          <View style={styles.colorView} lightColor={color} darkColor={color}></View>
+          <View style={[styles.categoryName, { backgroundColor: "rgba(118,118,128,0.12)" }]}>
+            <Text>{color}</Text>
+          </View>
+        </Pressable>
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <Pressable onPress={handleAdd}>
@@ -119,13 +138,30 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "600",
   },
-  pickerLabel: {
+  colorLabel: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     width: "90%",
     height: 44,
+  },
+  color: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+  },
+  colorView: {
+    width: 50,
+    height: 30,
+    borderRadius: 6,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
   },
   categoryName: {
     paddingVertical: 6,
