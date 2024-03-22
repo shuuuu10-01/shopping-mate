@@ -16,7 +16,7 @@ export default function CategoryModalScreen() {
   );
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
-  const [color, setColor] = useState("");
+  const [color, setColor] = useState("#EB4D3Dff");
   const navigate = useNavigation();
   const isEdit = !!id;
 
@@ -28,12 +28,12 @@ export default function CategoryModalScreen() {
   const handleAdd = () => {
     if (name === "") return;
     if (isEdit) {
-      dispatch(actions.category.edit({ ...originCategory, name: name }));
+      dispatch(actions.category.edit({ ...originCategory, name, color }));
     } else {
       dispatch(
         actions.category.add({
-          name: name,
-          color: "#fff",
+          name,
+          color,
         }),
       );
     }
