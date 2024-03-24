@@ -46,7 +46,7 @@ export default function CategoryModalScreen() {
   };
 
   const handlePress = useCallback(() => {
-    ColorPicker.showColorPicker({ supportsAlpha: true, initialColor: color }, (color) => {
+    ColorPicker.showColorPicker({ supportsAlpha: false, initialColor: color }, (color) => {
       setColor(color);
     });
   }, [color]);
