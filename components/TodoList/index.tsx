@@ -1,13 +1,14 @@
 import { StyleSheet, View } from "react-native";
 import { NestableScrollContainer } from "react-native-draggable-flatlist";
-import { CATEGORIES } from "@/constants/category";
 import { TodoCategory } from "./TodoCategory";
+import { selectors, useAppSelector } from "@/redux";
 
 export function TodoList() {
+  const categories = useAppSelector((state) => selectors.category.sortedCategories(state.category));
   return (
     <View style={styles.wrapper}>
       <NestableScrollContainer>
-        {CATEGORIES.map((c) => {
+        {categories.map((c) => {
           return <TodoCategory key={c.id} category={c} />;
         })}
         <TodoCategory category={undefined} />
