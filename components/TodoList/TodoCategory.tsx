@@ -1,10 +1,12 @@
 import { Category } from "@/types/category";
-import { Text } from "../Themed";
+import { Text, View } from "../Themed";
 import { StyleSheet } from "react-native";
 import { NestableDraggableFlatList } from "react-native-draggable-flatlist";
 import { Todo } from "@/types/todo";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
 import { Item } from "./Item";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 export function TodoCategory({
   category,
@@ -13,6 +15,7 @@ export function TodoCategory({
   category?: Category;
   completed?: Todo["completed"];
 }) {
+  const colorScheme = useColorScheme();
   const dispatch = useAppDispatch();
   const handleDragEnd = (dragEndTodo: Todo[]) => {
     const converted: Todo[] = dragEndTodo.map((d, index) => {
@@ -40,7 +43,16 @@ export function TodoCategory({
 
   return (
     <>
-      <Text style={styles.categoryName}>{categoryName()}</Text>
+      <View style={styles.label}>
+        {!completed && (
+          <View
+            style={[styles.circle, { borderColor: Colors[colorScheme ?? "light"].border }]}
+            lightColor={category?.color || undefined}
+            darkColor={category?.color || undefined}
+          ></View>
+        )}
+        <Text style={styles.categoryName}>{categoryName()}</Text>
+      </View>
       <NestableDraggableFlatList<Todo>
         data={items}
         onDragEnd={({ data }) => handleDragEnd(data)}
@@ -55,11 +67,30 @@ export function TodoCategory({
 const styles = StyleSheet.create({
   categoryName: {
     fontSize: 18,
-    marginBottom: 5,
   },
   container: {
     width: "100%",
     padding: 0,
     marginBottom: 20,
+  },
+  label: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginLeft: 2,
+    marginBottom: 5,
+  },
+  circle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
   },
 });
