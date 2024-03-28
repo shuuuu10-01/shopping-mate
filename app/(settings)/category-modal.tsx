@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import ColorPicker from "react-native-color-picker-ios";
+import useDeleteCategory from "@/hooks/useDeleteCategory";
 
 const INITIAL_COLOR = "#EB4D3Dff";
 
@@ -21,6 +22,7 @@ export default function CategoryModalScreen() {
   const [color, setColor] = useState(INITIAL_COLOR);
   const navigate = useNavigation();
   const isEdit = !!id;
+  const deleteCategory = useDeleteCategory(id);
 
   const reset = () => {
     setName("");
@@ -44,7 +46,7 @@ export default function CategoryModalScreen() {
   };
 
   const handleDelete = () => {
-    dispatch(actions.category.delete(id));
+    deleteCategory();
     reset();
   };
 
