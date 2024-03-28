@@ -9,12 +9,14 @@ import Colors from "@/constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
+import useDeleteTodo from "@/hooks/useDeleteTodo";
 
 export default function ModalScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const originTodo = useAppSelector((state) =>
     selectors.todo.todoSelectors.selectById(state.todo.todo, id),
   );
+  const deleteTodo = useDeleteTodo(originTodo);
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -46,7 +48,7 @@ export default function ModalScreen() {
   };
 
   const handleDelete = () => {
-    dispatch(actions.todo.delete(id));
+    deleteTodo?.();
     reset();
   };
 
