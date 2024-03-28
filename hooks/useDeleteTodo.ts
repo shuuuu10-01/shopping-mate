@@ -7,8 +7,8 @@ import { useCallback } from "react";
  *
  * @param todo
  */
-export default function useDeleteTodo(todo: Todo) {
-  if (!todo.id) return;
+export default function useDeleteTodo(todo?: Todo) {
+  if (!todo) return;
   const dispatch = useAppDispatch();
   const sortedTodo = useAppSelector((state) =>
     selectors.todo.sortedTodoByCategoryId(state.todo, todo.categoryId),
