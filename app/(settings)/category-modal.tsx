@@ -9,6 +9,8 @@ import { useLocalSearchParams } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import ColorPicker from "react-native-color-picker-ios";
 
+const INITIAL_COLOR = "#EB4D3Dff";
+
 export default function CategoryModalScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const originCategory = useAppSelector((state) =>
@@ -16,12 +18,13 @@ export default function CategoryModalScreen() {
   );
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
-  const [color, setColor] = useState("#EB4D3Dff");
+  const [color, setColor] = useState(INITIAL_COLOR);
   const navigate = useNavigation();
   const isEdit = !!id;
 
   const reset = () => {
     setName("");
+    setColor(INITIAL_COLOR);
     navigate.goBack();
   };
 
@@ -41,7 +44,7 @@ export default function CategoryModalScreen() {
   };
 
   const handleDelete = () => {
-    dispatch(actions.todo.delete(id));
+    dispatch(actions.category.delete(id));
     reset();
   };
 
