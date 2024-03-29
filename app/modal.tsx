@@ -6,19 +6,21 @@ import { Text, TextInput, View } from "@/components/Themed";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
 import { useEffect, useMemo, useState } from "react";
 import Colors from "@/constants/Colors";
-import { CATEGORIES } from "@/constants/category";
 import { useNavigation } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
+import useDeleteTodo from "@/hooks/useDeleteTodo";
 
 export default function ModalScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const originTodo = useAppSelector((state) =>
     selectors.todo.todoSelectors.selectById(state.todo.todo, id),
   );
+  const deleteTodo = useDeleteTodo(originTodo);
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
+  const categories = useAppSelector((state) => selectors.category.sortedCategories(state.category));
   const colorScheme = useColorScheme();
   const navigate = useNavigation();
   const isEdit = !!id;
@@ -46,14 +48,14 @@ export default function ModalScreen() {
   };
 
   const handleDelete = () => {
-    dispatch(actions.todo.delete(id));
+    deleteTodo?.();
     reset();
   };
 
   const categoryName = useMemo(() => {
-    const find = CATEGORIES.find((c) => c.id === category);
+    const find = categories.find((c) => c.id === category);
     return find?.name || "カテゴリー未選択";
-  }, [category]);
+  }, [category, categories]);
 
   useEffect(() => {
     if (!isEdit) return;
@@ -84,7 +86,7 @@ export default function ModalScreen() {
           value=""
           color={Colors[colorScheme ?? "light"].text}
         ></Picker.Item>
-        {CATEGORIES.map((c) => {
+        {categories.map((c) => {
           return (
             <Picker.Item
               key={c.id}
