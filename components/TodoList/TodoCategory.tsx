@@ -42,7 +42,7 @@ export function TodoCategory({
   if (items.length === 0) return;
 
   return (
-    <>
+    <View style={styles.wrapper}>
       <View style={styles.label}>
         {!completed && (
           <View
@@ -60,18 +60,30 @@ export function TodoCategory({
         renderItem={Item}
         style={styles.container}
       />
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    marginVertical: 10,
+    marginHorizontal: 20,
+    padding: 10,
+    borderRadius: 6,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
+  },
   categoryName: {
     fontSize: 18,
   },
   container: {
     width: "100%",
     padding: 0,
-    marginBottom: 20,
   },
   label: {
     display: "flex",

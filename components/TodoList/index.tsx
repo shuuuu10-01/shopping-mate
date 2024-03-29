@@ -20,7 +20,7 @@ export function TodoList() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    width: "80%",
+    width: "100%",
     display: "flex",
     alignItems: "center",
   },
