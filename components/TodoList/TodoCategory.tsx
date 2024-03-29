@@ -9,9 +9,9 @@ import {
 import { Todo } from "@/types/todo";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
 import { Item } from "./Item";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { FontAwesome } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
 
 type Props =
   | ({
@@ -53,7 +53,7 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
   if (!sortable && items.length === 0) return;
 
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, isActive && styles.active]}>
       <View style={[styles.title, { marginBottom: items.length === 0 ? 0 : 10 }]}>
         <View style={styles.label}>
           {!completed && (
@@ -108,11 +108,12 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 3,
+    shadowRadius: 1,
   },
+  active: { shadowRadius: 4, opacity: 0.9 },
   title: {
     display: "flex",
     flexDirection: "row",
