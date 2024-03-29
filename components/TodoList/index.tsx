@@ -4,17 +4,29 @@ import {
   NestableScrollContainer,
 } from "react-native-draggable-flatlist";
 import { TodoCategory, SortableTodoCategory } from "./TodoCategory";
-import { selectors, useAppSelector } from "@/redux";
+import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
 import { Category } from "@/types/category";
 
 export function TodoList() {
   const categories = useAppSelector((state) => selectors.category.sortedCategories(state.category));
+
+  const dispatch = useAppDispatch();
+  const handleDragEnd = (dragEndCategory: Category[]) => {
+    const converted: Category[] = dragEndCategory.map((d, index) => {
+      return {
+        ...d,
+        order: index,
+      };
+    });
+    dispatch(actions.category.setMany(converted));
+  };
+
   return (
     <View style={styles.wrapper}>
       <NestableScrollContainer>
         <NestableDraggableFlatList<Category>
           data={categories}
-          onDragEnd={({ data }) => console.log(data)}
+          onDragEnd={({ data }) => handleDragEnd(data)}
           keyExtractor={({ id }) => id}
           renderItem={SortableTodoCategory}
         />
