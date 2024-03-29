@@ -12,7 +12,7 @@ export default function CategoryScreen() {
   return (
     <View style={styles.container}>
       <CategoryList />
-      <Link href="/(settings)/category-modal" asChild>
+      <Link href="/category-modal" asChild>
         <Pressable style={styles.add}>
           {({ pressed }) => (
             <FontAwesome5

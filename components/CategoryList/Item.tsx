@@ -22,7 +22,7 @@ export const Item = ({ item, drag, isActive }: RenderItemParams<Category>) => {
           },
         ]}
       >
-        <Link asChild href={{ pathname: "/(settings)/category-modal", params: { id: item.id } }}>
+        <Link asChild href={{ pathname: "/category-modal", params: { id: item.id } }}>
           <Pressable disabled={isActive} style={styles.circleWrapper}>
             <View
               style={[styles.circle, { borderColor: Colors[colorScheme ?? "light"].border }]}

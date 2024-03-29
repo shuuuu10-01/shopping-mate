@@ -66,6 +66,13 @@ function RootLayoutNav() {
                   headerShown: false,
                 }}
               />
+              <Stack.Screen
+                name="category-modal"
+                options={{
+                  presentation: "formSheet",
+                  headerShown: false,
+                }}
+              />
             </Stack>
           </ThemeProvider>
         </PersistGate>
