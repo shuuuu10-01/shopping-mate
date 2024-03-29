@@ -21,8 +21,7 @@ export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
         style={[
           styles.item,
           {
-            borderStyle: isActive ? "dotted" : "solid",
-            borderColor: Colors[colorScheme ?? "light"].border,
+            borderColor: Colors[colorScheme ?? "light"].placeholderText,
           },
         ]}
       >
@@ -32,11 +31,19 @@ export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
             disabled={isActive}
             onPress={() => handleToggleCheck(item)}
           >
-            <FontAwesome
-              name={item.completed ? "check-square" : "square-o"}
-              size={25}
-              color={Colors[colorScheme ?? "light"].text}
-            />
+            {item.completed ? (
+              <FontAwesome
+                name="check-square"
+                size={25}
+                color={Colors[colorScheme ?? "light"].text}
+              />
+            ) : (
+              <FontAwesome
+                name="square-o"
+                size={25}
+                color={Colors[colorScheme ?? "light"].placeholderText}
+              />
+            )}
           </Pressable>
           <Pressable
             onPress={() => router.push({ pathname: "/modal", params: { id: item.id } })}
@@ -78,7 +85,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     borderRadius: 4,
-    borderWidth: 0.5,
+    borderWidth: 1,
     gap: 15,
     overflow: "hidden",
   },

@@ -113,11 +113,11 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     shadowColor: "#000",
     shadowOffset: {
-      width: 0,
-      height: 1,
+      width: 2,
+      height: 2,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 1,
+    shadowRadius: 2,
   },
   active: { shadowRadius: 4, opacity: 0.9 },
   title: {
