@@ -54,7 +54,7 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.title}>
+      <View style={[styles.title, { marginBottom: items.length === 0 ? 0 : 10 }]}>
         <View style={styles.label}>
           {!completed && (
             <View
@@ -65,18 +65,20 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
           )}
           <Text style={styles.categoryName}>{categoryName()}</Text>
         </View>
-        <Pressable onLongPress={drag} style={styles.dragButton} disabled={isActive}>
-          {({ pressed }) => (
-            <FontAwesome
-              name="bars"
-              size={20}
-              color={Colors[colorScheme ?? "light"].placeholderText}
-              style={{
-                opacity: pressed || isActive ? 1 : 0.5,
-              }}
-            />
-          )}
-        </Pressable>
+        {sortable && (
+          <Pressable onLongPress={drag} style={styles.dragButton} disabled={isActive}>
+            {({ pressed }) => (
+              <FontAwesome
+                name="bars"
+                size={20}
+                color={Colors[colorScheme ?? "light"].placeholderText}
+                style={{
+                  opacity: pressed || isActive ? 1 : 0.5,
+                }}
+              />
+            )}
+          </Pressable>
+        )}
       </View>
       <NestableDraggableFlatList<Todo>
         data={items}
@@ -118,7 +120,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 7,
     marginLeft: 2,
-    marginBottom: 10,
   },
   label: {
     flex: 1,
