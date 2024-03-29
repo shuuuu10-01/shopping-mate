@@ -1,20 +1,31 @@
 import { Category } from "@/types/category";
 import { Text, View } from "../Themed";
-import { StyleSheet } from "react-native";
-import { NestableDraggableFlatList } from "react-native-draggable-flatlist";
+import { Pressable, StyleSheet } from "react-native";
+import {
+  NestableDraggableFlatList,
+  RenderItemParams,
+  ScaleDecorator,
+} from "react-native-draggable-flatlist";
 import { Todo } from "@/types/todo";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
 import { Item } from "./Item";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { FontAwesome } from "@expo/vector-icons";
 
-export function TodoCategory({
-  category,
-  completed = false,
-}: {
-  category?: Category;
-  completed?: Todo["completed"];
-}) {
+type Props =
+  | ({
+      sortable: true;
+      category: Category;
+      completed?: undefined;
+    } & RenderItemParams<Category>)
+  | ({
+      sortable: false;
+      category?: undefined;
+      completed: boolean;
+    } & Partial<RenderItemParams<Category>>);
+
+export function TodoCategory({ sortable, category, completed, drag, isActive }: Props) {
   const colorScheme = useColorScheme();
   const dispatch = useAppDispatch();
   const handleDragEnd = (dragEndTodo: Todo[]) => {
@@ -38,20 +49,34 @@ export function TodoCategory({
     return completed ? "完了済み" : "カテゴリー未選択";
   };
 
-  // 0件の場合は表示しない
-  if (items.length === 0) return;
+  // 入れ替え可能項目以外で0件の場合は表示しない
+  if (!sortable && items.length === 0) return;
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.label}>
-        {!completed && (
-          <View
-            style={[styles.circle, { borderColor: Colors[colorScheme ?? "light"].border }]}
-            lightColor={category?.color || undefined}
-            darkColor={category?.color || undefined}
-          ></View>
-        )}
-        <Text style={styles.categoryName}>{categoryName()}</Text>
+      <View style={styles.title}>
+        <View style={styles.label}>
+          {!completed && (
+            <View
+              style={[styles.circle, { borderColor: Colors[colorScheme ?? "light"].border }]}
+              lightColor={category?.color || undefined}
+              darkColor={category?.color || undefined}
+            ></View>
+          )}
+          <Text style={styles.categoryName}>{categoryName()}</Text>
+        </View>
+        <Pressable onLongPress={drag} style={styles.dragButton} disabled={isActive}>
+          {({ pressed }) => (
+            <FontAwesome
+              name="bars"
+              size={20}
+              color={Colors[colorScheme ?? "light"].placeholderText}
+              style={{
+                opacity: pressed || isActive ? 1 : 0.5,
+              }}
+            />
+          )}
+        </Pressable>
       </View>
       <NestableDraggableFlatList<Todo>
         data={items}
@@ -63,6 +88,14 @@ export function TodoCategory({
     </View>
   );
 }
+
+export const SortableTodoCategory = (props: RenderItemParams<Category>) => {
+  return (
+    <ScaleDecorator activeScale={1}>
+      <TodoCategory sortable category={props.item} {...props} />
+    </ScaleDecorator>
+  );
+};
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -78,20 +111,24 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3,
   },
-  categoryName: {
-    fontSize: 18,
-  },
-  container: {
-    width: "100%",
-    padding: 0,
+  title: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 7,
+    marginLeft: 2,
+    marginBottom: 10,
   },
   label: {
+    flex: 1,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     gap: 7,
-    marginLeft: 2,
-    marginBottom: 10,
+  },
+  categoryName: {
+    fontSize: 18,
   },
   circle: {
     width: 15,
@@ -104,5 +141,16 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 1,
+  },
+  dragButton: {
+    display: "flex",
+    width: 35,
+    paddingRight: 15,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  container: {
+    width: "100%",
+    padding: 0,
   },
 });
