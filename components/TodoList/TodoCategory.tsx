@@ -12,6 +12,7 @@ import { Item } from "./Item";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
+import { router } from "expo-router";
 
 type Props =
   | ({
@@ -49,13 +50,18 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
     return completed ? "完了済み" : "カテゴリー未選択";
   };
 
+  const handlePress = () => {
+    if (!category || !sortable) return;
+    router.push({ pathname: "/category-modal", params: { id: category.id } });
+  };
+
   // 入れ替え可能項目以外で0件の場合は表示しない
   if (!sortable && items.length === 0) return;
 
   return (
     <View style={[styles.wrapper, isActive && styles.active]}>
       <View style={[styles.title, { marginBottom: items.length === 0 ? 0 : 10 }]}>
-        <View style={styles.label}>
+        <Pressable style={styles.label} onPress={handlePress}>
           {!completed && (
             <View
               style={[styles.circle, { borderColor: Colors[colorScheme ?? "light"].border }]}
@@ -64,7 +70,7 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
             ></View>
           )}
           <Text style={styles.categoryName}>{categoryName()}</Text>
-        </View>
+        </Pressable>
         {sortable && (
           <Pressable onLongPress={drag} style={styles.dragButton} disabled={isActive}>
             {({ pressed }) => (
