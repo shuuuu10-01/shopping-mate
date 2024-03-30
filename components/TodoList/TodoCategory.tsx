@@ -99,7 +99,7 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
 
 export const SortableTodoCategory = (props: RenderItemParams<Category>) => {
   return (
-    <ScaleDecorator activeScale={1}>
+    <ScaleDecorator activeScale={0.95}>
       <TodoCategory sortable category={props.item} {...props} />
     </ScaleDecorator>
   );
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 2,
   },
-  active: { shadowRadius: 10, opacity: 0.9 },
+  active: { opacity: 0.9 },
   title: {
     display: "flex",
     flexDirection: "row",

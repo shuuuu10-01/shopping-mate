@@ -16,10 +16,11 @@ export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
   };
 
   return (
-    <ScaleDecorator activeScale={1}>
+    <ScaleDecorator activeScale={0.95}>
       <View
         style={[
           styles.item,
+          isActive && styles.active,
           {
             borderColor: Colors[colorScheme ?? "light"].placeholderText,
           },
@@ -57,7 +58,7 @@ export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
         {item.completed ? (
           <View style={styles.dragButton}></View>
         ) : (
-          <Pressable onLongPress={drag} disabled={isActive} style={styles.dragButton}>
+          <Pressable onTouchStart={drag} disabled={isActive} style={styles.dragButton}>
             {({ pressed }) => (
               <FontAwesome
                 name="bars"
@@ -88,6 +89,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     gap: 15,
     overflow: "hidden",
+  },
+  active: {
+    opacity: 0.9,
   },
   checkWrapper: {
     flex: 1,
