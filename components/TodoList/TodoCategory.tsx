@@ -64,7 +64,7 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
         <Pressable style={styles.label} onPress={handlePress}>
           {!completed && (
             <View
-              style={[styles.circle, { borderColor: Colors[colorScheme ?? "light"].border }]}
+              style={styles.circle}
               lightColor={category?.color || undefined}
               darkColor={category?.color || undefined}
             ></View>
@@ -135,9 +135,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 7,
   },
-  categoryName: {
-    fontSize: 18,
-  },
   circle: {
     width: 15,
     height: 15,
@@ -149,6 +146,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 1,
+  },
+  categoryName: {
+    flex: 1,
+    fontSize: 18,
   },
   dragButton: {
     display: "flex",
