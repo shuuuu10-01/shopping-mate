@@ -72,7 +72,7 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
           <Text style={styles.categoryName}>{categoryName()}</Text>
         </Pressable>
         {sortable && (
-          <Pressable onLongPress={drag} style={styles.dragButton} disabled={isActive}>
+          <Pressable onTouchStart={drag} style={styles.dragButton} disabled={isActive}>
             {({ pressed }) => (
               <FontAwesome
                 name="bars"
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 2,
   },
-  active: { shadowRadius: 4, opacity: 0.9 },
+  active: { shadowRadius: 10, opacity: 0.9 },
   title: {
     display: "flex",
     flexDirection: "row",
