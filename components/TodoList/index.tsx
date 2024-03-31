@@ -23,7 +23,7 @@ export function TodoList() {
 
   return (
     <View style={styles.wrapper}>
-      <NestableScrollContainer>
+      <NestableScrollContainer style={{ width: "100%" }}>
         <NestableDraggableFlatList<Category>
           data={categories}
           onDragEnd={({ data }) => handleDragEnd(data)}
