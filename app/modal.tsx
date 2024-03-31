@@ -110,9 +110,9 @@ export default function ModalScreen() {
         ></TextInput>
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <Pressable onPress={handleAdd}>
+      <Pressable onPress={handleAdd} disabled={!name}>
         {({ pressed }) => (
-          <View style={styles.addButton}>
+          <View style={[styles.addButton, { opacity: name ? 1 : 0.5 }]}>
             <Text
               style={{
                 fontSize: 18,
@@ -189,9 +189,9 @@ const styles = StyleSheet.create({
   },
   addButton: {
     marginTop: 30,
-    paddingVertical: 6,
+    paddingVertical: 14,
     paddingHorizontal: 20,
-    borderRadius: 6,
+    borderRadius: 12,
     backgroundColor: "rgba(118,118,128,0.12)",
   },
   separator: {
