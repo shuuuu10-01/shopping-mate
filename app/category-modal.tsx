@@ -9,6 +9,7 @@ import { useLocalSearchParams } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import ColorPicker from "react-native-color-picker-ios";
 import useDeleteCategory from "@/hooks/useDeleteCategory";
+import { Separator } from "@/components/Separator";
 
 const INITIAL_COLOR = "#EB4D3Dff";
 
@@ -79,7 +80,7 @@ export default function CategoryModalScreen() {
       <View style={styles.header}>
         <Text style={styles.headerTitle}> {id ? "カテゴリーを編集" : "カテゴリーを追加"}</Text>
       </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="#98989E" />
+      <Separator />
       <View style={styles.titleLabel}>
         <Text>カテゴリー名</Text>
         <TextInput
@@ -91,7 +92,7 @@ export default function CategoryModalScreen() {
           placeholder="カテゴリー名を入力してください"
         ></TextInput>
       </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="#98989E" />
+      <Separator />
       <View style={styles.colorLabel}>
         <Text>カラー</Text>
         <Pressable onPress={handlePress} style={styles.color}>
@@ -101,7 +102,7 @@ export default function CategoryModalScreen() {
           </View>
         </Pressable>
       </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="#98989E" />
+      <Separator />
       <Pressable onPress={handleAdd} disabled={!name}>
         {({ pressed }) => (
           <View
@@ -153,7 +154,12 @@ const styles = StyleSheet.create({
     borderRadius: 2.5,
     backgroundColor: "#3C3C43",
   },
-  header: { display: "flex", justifyContent: "center", alignItems: "center", height: 44 },
+  header: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 44,
+  },
   headerTitle: {
     fontSize: 17,
     fontWeight: "600",
@@ -205,10 +211,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,
-  },
-  separator: {
-    height: 1,
-    width: "100%",
   },
   delete: {
     position: "absolute",

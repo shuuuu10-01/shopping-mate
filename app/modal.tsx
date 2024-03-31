@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import useDeleteTodo from "@/hooks/useDeleteTodo";
+import { Separator } from "@/components/Separator";
 
 export default function ModalScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -69,7 +70,7 @@ export default function ModalScreen() {
       <View style={styles.header}>
         <Text style={styles.headerTitle}> {id ? "タスクを編集" : "タスクを追加"}</Text>
       </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="#98989E" />
+      <Separator />
       <View style={styles.pickerLabel}>
         <Text>カテゴリー</Text>
         <View style={styles.categoryName} lightColor="#eee" darkColor="#444346">
@@ -97,7 +98,7 @@ export default function ModalScreen() {
           );
         })}
       </Picker>
-      <View style={styles.separator} lightColor="#eee" darkColor="#98989E" />
+      <Separator />
       <View style={styles.titleLabel}>
         <Text>商品名</Text>
         <TextInput
@@ -109,7 +110,7 @@ export default function ModalScreen() {
           placeholder="タイトルを入力してください"
         ></TextInput>
       </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="#98989E" />
+      <Separator />
       <Pressable onPress={handleAdd} disabled={!name}>
         {({ pressed }) => (
           <View
@@ -161,7 +162,12 @@ const styles = StyleSheet.create({
     borderRadius: 2.5,
     backgroundColor: "#3C3C43",
   },
-  header: { display: "flex", justifyContent: "center", alignItems: "center", height: 44 },
+  header: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 44,
+  },
   headerTitle: {
     fontSize: 17,
     fontWeight: "600",
@@ -196,10 +202,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,
-  },
-  separator: {
-    height: 1,
-    width: "100%",
   },
   delete: {
     position: "absolute",
