@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 UIManager.setLayoutAnimationEnabledExperimental &&
   UIManager.setLayoutAnimationEnabledExperimental(true);
 
-export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
+export const Item = ({ item, drag, isActive, getIndex }: RenderItemParams<Todo>) => {
   const colorScheme = useColorScheme();
   const dispatch = useAppDispatch();
   const [expanded, setExpanded] = useState(false);
@@ -43,6 +43,8 @@ export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
           isActive && styles.active,
           {
             borderColor: Colors[colorScheme ?? "light"].placeholderText,
+            // borderを重ねるための対応
+            marginTop: getIndex() === 0 ? 0 : -1,
           },
         ]}
       >
@@ -109,7 +111,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     gap: 15,
     overflow: "hidden",
-    marginTop: -1, // borderを重ねるための調整
   },
   active: {
     opacity: 0.9,
