@@ -69,10 +69,10 @@ export default function ModalScreen() {
       <View style={styles.header}>
         <Text style={styles.headerTitle}> {id ? "タスクを編集" : "タスクを追加"}</Text>
       </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={styles.separator} lightColor="#eee" darkColor="#98989E" />
       <View style={styles.pickerLabel}>
         <Text>カテゴリー</Text>
-        <View style={[styles.categoryName, { backgroundColor: "rgba(118,118,128,0.12)" }]}>
+        <View style={styles.categoryName} lightColor="#eee" darkColor="#444346">
           <Text>{categoryName}</Text>
         </View>
       </View>
@@ -97,7 +97,7 @@ export default function ModalScreen() {
           );
         })}
       </Picker>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={styles.separator} lightColor="#eee" darkColor="#98989E" />
       <View style={styles.titleLabel}>
         <Text>商品名</Text>
         <TextInput
@@ -109,10 +109,14 @@ export default function ModalScreen() {
           placeholder="タイトルを入力してください"
         ></TextInput>
       </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={styles.separator} lightColor="#eee" darkColor="#98989E" />
       <Pressable onPress={handleAdd} disabled={!name}>
         {({ pressed }) => (
-          <View style={[styles.addButton, { opacity: name ? 1 : 0.5 }]}>
+          <View
+            style={[styles.addButton, { opacity: name ? 1 : 0.5 }]}
+            lightColor="#eee"
+            darkColor="#444346"
+          >
             <Text
               style={{
                 fontSize: 18,
@@ -192,7 +196,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,
-    backgroundColor: "rgba(118,118,128,0.12)",
   },
   separator: {
     height: 1,

@@ -79,7 +79,7 @@ export default function CategoryModalScreen() {
       <View style={styles.header}>
         <Text style={styles.headerTitle}> {id ? "カテゴリーを編集" : "カテゴリーを追加"}</Text>
       </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={styles.separator} lightColor="#eee" darkColor="#98989E" />
       <View style={styles.titleLabel}>
         <Text>カテゴリー名</Text>
         <TextInput
@@ -91,20 +91,24 @@ export default function CategoryModalScreen() {
           placeholder="カテゴリー名を入力してください"
         ></TextInput>
       </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={styles.separator} lightColor="#eee" darkColor="#98989E" />
       <View style={styles.colorLabel}>
         <Text>カラー</Text>
         <Pressable onPress={handlePress} style={styles.color}>
           <View style={styles.colorView} lightColor={color} darkColor={color}></View>
-          <View style={[styles.categoryName, { backgroundColor: "rgba(118,118,128,0.12)" }]}>
+          <View style={styles.categoryName} lightColor="#eee" darkColor="#444346">
             <Text>{color}</Text>
           </View>
         </Pressable>
       </View>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={styles.separator} lightColor="#eee" darkColor="#98989E" />
       <Pressable onPress={handleAdd} disabled={!name}>
         {({ pressed }) => (
-          <View style={[styles.addButton, { opacity: name ? 1 : 0.5 }]}>
+          <View
+            style={[styles.addButton, { opacity: name ? 1 : 0.5 }]}
+            lightColor="#eee"
+            darkColor="#444346"
+          >
             <Text
               style={{
                 fontSize: 18,
@@ -201,7 +205,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,
-    backgroundColor: "rgba(118,118,128,0.12)",
   },
   separator: {
     height: 1,
