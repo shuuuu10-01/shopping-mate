@@ -2,7 +2,7 @@ import { Pressable, StyleSheet } from "react-native";
 
 import { View } from "@/components/Themed";
 import React from "react";
-import { FontAwesome } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { TodoList } from "@/components/TodoList";
@@ -15,11 +15,13 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <TodoList />
       <Link href="/modal" asChild>
-        <Pressable style={styles.add}>
+        <Pressable
+          style={{ ...styles.add, backgroundColor: Colors[colorScheme ?? "light"].background }}
+        >
           {({ pressed }) => (
-            <FontAwesome
-              name="plus-circle"
-              size={60}
+            <MaterialIcons
+              name="add"
+              size={30}
               color={Colors[colorScheme ?? "light"].text}
               style={{ opacity: pressed ? 0.5 : 1 }}
             />
@@ -42,5 +44,18 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 35,
     right: 35,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
