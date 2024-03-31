@@ -71,8 +71,8 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
           {!completed && (
             <View
               style={styles.circle}
-              lightColor={category?.color || undefined}
-              darkColor={category?.color || undefined}
+              lightColor={category?.color || Colors[colorScheme ?? "light"].border}
+              darkColor={category?.color || Colors[colorScheme ?? "light"].border}
             ></View>
           )}
           <Text style={styles.categoryName}>{categoryName()}</Text>
