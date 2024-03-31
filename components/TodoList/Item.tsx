@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     gap: 15,
     overflow: "hidden",
+    marginTop: -1, // borderを重ねるための調整
   },
   active: {
     opacity: 0.9,

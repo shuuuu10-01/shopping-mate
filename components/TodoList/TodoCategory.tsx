@@ -160,6 +160,6 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "100%",
-    padding: 0,
+    paddingTop: 1, // borderを重ねるためのmarginTop: -1で一番上の要素が見きれないための対応
   },
 });
