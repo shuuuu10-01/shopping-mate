@@ -67,7 +67,7 @@ export default function ModalScreen() {
     <View style={styles.container}>
       <View style={styles.close}></View>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}> {id ? "タスクの編集" : "タスクの追加"}</Text>
+        <Text style={styles.headerTitle}> {id ? "タスクを編集" : "タスクを追加"}</Text>
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <View style={styles.pickerLabel}>

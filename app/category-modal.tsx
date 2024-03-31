@@ -46,7 +46,7 @@ export default function CategoryModalScreen() {
   };
 
   const handleDelete = () => {
-    Alert.alert("カテゴリーの削除", "カテゴリーを削除しますか", [
+    Alert.alert("カテゴリーを削除", "カテゴリーを削除しますか", [
       {
         text: "キャンセル",
       },
@@ -77,7 +77,7 @@ export default function CategoryModalScreen() {
     <View style={styles.container}>
       <View style={styles.close}></View>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}> {id ? "カテゴリーの編集" : "カテゴリーの追加"}</Text>
+        <Text style={styles.headerTitle}> {id ? "カテゴリーを編集" : "カテゴリーを追加"}</Text>
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <View style={styles.titleLabel}>
