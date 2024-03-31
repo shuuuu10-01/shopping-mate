@@ -58,9 +58,15 @@ function RootLayoutNav() {
           <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
             <Stack>
               <Stack.Screen name="(todo)" options={{ headerShown: false }} />
-              <Stack.Screen name="(settings)" options={{ headerShown: false }} />
               <Stack.Screen
                 name="modal"
+                options={{
+                  presentation: "formSheet",
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="category-modal"
                 options={{
                   presentation: "formSheet",
                   headerShown: false,

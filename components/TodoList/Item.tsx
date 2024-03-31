@@ -3,44 +3,74 @@ import { RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlis
 import { Text, View } from "../Themed";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { Pressable, StyleSheet } from "react-native";
+import { LayoutAnimation, Pressable, StyleSheet, UIManager } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { actions, useAppDispatch } from "@/redux";
 import { router } from "expo-router";
+import { useEffect, useState } from "react";
 
-export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
+// アニメーションの設定
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+
+export const Item = ({ item, drag, isActive, getIndex }: RenderItemParams<Todo>) => {
   const colorScheme = useColorScheme();
   const dispatch = useAppDispatch();
-  const handleToggleCheck = (item: Todo) => {
-    dispatch(actions.todo.toggle(item));
+  const [expanded, setExpanded] = useState(false);
+  const [completed, setCompleted] = useState(item.completed);
+
+  const handleToggleCheck = () => {
+    setExpanded(true);
+    setCompleted((prev) => !prev);
   };
+  // expandedがtrueに変更されたときにアニメーション
+  useEffect(() => {
+    if (!expanded) return;
+    dispatch(actions.todo.toggle(item));
+    LayoutAnimation.configureNext(
+      { ...LayoutAnimation.Presets.easeInEaseOut, duration: 300 },
+      () => {
+        setExpanded(false);
+      },
+    );
+  }, [expanded]);
 
   return (
-    <ScaleDecorator activeScale={1}>
+    <ScaleDecorator activeScale={0.95}>
       <View
         style={[
           styles.item,
+          isActive && styles.active,
           {
-            borderStyle: isActive ? "dotted" : "solid",
-            borderColor: Colors[colorScheme ?? "light"].border,
+            borderColor: Colors[colorScheme ?? "light"].placeholderText,
+            // borderを重ねるための対応
+            marginTop: getIndex() === 0 ? 0 : -1,
           },
         ]}
       >
         <View style={styles.checkWrapper}>
           <Pressable
             style={styles.checkbox}
-            disabled={isActive}
-            onPress={() => handleToggleCheck(item)}
+            disabled={isActive || expanded}
+            onPress={handleToggleCheck}
           >
-            <FontAwesome
-              name={item.completed ? "check-square" : "square-o"}
-              size={25}
-              color={Colors[colorScheme ?? "light"].text}
-            />
+            {completed ? (
+              <FontAwesome
+                name="check-square"
+                size={25}
+                color={Colors[colorScheme ?? "light"].text}
+              />
+            ) : (
+              <FontAwesome
+                name="square-o"
+                size={25}
+                color={Colors[colorScheme ?? "light"].placeholderText}
+              />
+            )}
           </Pressable>
           <Pressable
             onPress={() => router.push({ pathname: "/modal", params: { id: item.id } })}
-            disabled={isActive}
+            disabled={isActive || expanded}
             style={styles.title}
           >
             <Text>{item.title}</Text>
@@ -50,7 +80,7 @@ export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
         {item.completed ? (
           <View style={styles.dragButton}></View>
         ) : (
-          <Pressable onLongPress={drag} disabled={isActive} style={styles.dragButton}>
+          <Pressable onTouchStart={drag} disabled={isActive || expanded} style={styles.dragButton}>
             {({ pressed }) => (
               <FontAwesome
                 name="bars"
@@ -78,9 +108,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     borderRadius: 4,
-    borderWidth: 0.5,
+    borderWidth: 1,
     gap: 15,
     overflow: "hidden",
+  },
+  active: {
+    opacity: 0.9,
   },
   checkWrapper: {
     flex: 1,
