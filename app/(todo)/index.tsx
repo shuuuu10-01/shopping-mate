@@ -16,7 +16,11 @@ export default function HomeScreen() {
       <TodoList />
       <Link href="/modal" asChild>
         <Pressable
-          style={{ ...styles.add, backgroundColor: Colors[colorScheme ?? "light"].background }}
+          style={{
+            ...styles.add,
+            backgroundColor: Colors[colorScheme ?? "light"].background,
+            borderColor: Colors[colorScheme ?? "light"].placeholderText,
+          }}
         >
           {({ pressed }) => (
             <MaterialIcons
@@ -45,13 +49,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 2,
+    borderWidth: 1,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
