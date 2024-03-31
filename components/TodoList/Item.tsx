@@ -3,104 +3,95 @@ import { RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlis
 import { Text, View } from "../Themed";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { Animated, Pressable, StyleSheet } from "react-native";
+import { LayoutAnimation, Pressable, StyleSheet, UIManager } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { actions, useAppDispatch } from "@/redux";
 import { router } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-const ANIMATION_DURATION = 200;
+// アニメーションの設定
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
 
 export const Item = ({ item, drag, isActive }: RenderItemParams<Todo>) => {
   const colorScheme = useColorScheme();
   const dispatch = useAppDispatch();
   const [expanded, setExpanded] = useState(false);
   const [completed, setCompleted] = useState(item.completed);
-  const scaleYAnim = useRef(new Animated.Value(1)).current;
 
-  const handleToggleCheck = (item: Todo) => {
-    if (expanded) return;
-
+  const handleToggleCheck = () => {
     setExpanded(true);
     setCompleted((prev) => !prev);
-    Animated.timing(scaleYAnim, {
-      toValue: 0,
-      duration: ANIMATION_DURATION,
-      useNativeDriver: true,
-    }).start();
-    setTimeout(() => {
-      dispatch(actions.todo.toggle(item));
-      setExpanded(false);
-    }, ANIMATION_DURATION);
   };
+  // expandedがtrueに変更されたときにアニメーション
+  useEffect(() => {
+    if (!expanded) return;
+    dispatch(actions.todo.toggle(item));
+    LayoutAnimation.configureNext(
+      { ...LayoutAnimation.Presets.easeInEaseOut, duration: 300 },
+      () => {
+        setExpanded(false);
+      },
+    );
+  }, [expanded]);
 
   return (
     <ScaleDecorator activeScale={0.95}>
-      <Animated.View
-        style={{
-          transform: [{ scaleY: scaleYAnim }],
-        }}
+      <View
+        style={[
+          styles.item,
+          isActive && styles.active,
+          {
+            borderColor: Colors[colorScheme ?? "light"].placeholderText,
+          },
+        ]}
       >
-        <View
-          style={[
-            styles.item,
-            isActive && styles.active,
-            {
-              borderColor: Colors[colorScheme ?? "light"].placeholderText,
-            },
-          ]}
-        >
-          <View style={styles.checkWrapper}>
-            <Pressable
-              style={styles.checkbox}
-              disabled={isActive || expanded}
-              onPress={() => handleToggleCheck(item)}
-            >
-              {completed ? (
-                <FontAwesome
-                  name="check-square"
-                  size={25}
-                  color={Colors[colorScheme ?? "light"].text}
-                />
-              ) : (
-                <FontAwesome
-                  name="square-o"
-                  size={25}
-                  color={Colors[colorScheme ?? "light"].placeholderText}
-                />
-              )}
-            </Pressable>
-            <Pressable
-              onPress={() => router.push({ pathname: "/modal", params: { id: item.id } })}
-              disabled={isActive || expanded}
-              style={styles.title}
-            >
-              <Text>{item.title}</Text>
-            </Pressable>
-          </View>
-          {/* 完了済みの場合はソートボタンは非表示 */}
-          {item.completed ? (
-            <View style={styles.dragButton}></View>
-          ) : (
-            <Pressable
-              onTouchStart={drag}
-              disabled={isActive || expanded}
-              style={styles.dragButton}
-            >
-              {({ pressed }) => (
-                <FontAwesome
-                  name="bars"
-                  size={20}
-                  color={Colors[colorScheme ?? "light"].placeholderText}
-                  style={{
-                    opacity: pressed || isActive ? 1 : 0.5,
-                  }}
-                />
-              )}
-            </Pressable>
-          )}
+        <View style={styles.checkWrapper}>
+          <Pressable
+            style={styles.checkbox}
+            disabled={isActive || expanded}
+            onPress={handleToggleCheck}
+          >
+            {completed ? (
+              <FontAwesome
+                name="check-square"
+                size={25}
+                color={Colors[colorScheme ?? "light"].text}
+              />
+            ) : (
+              <FontAwesome
+                name="square-o"
+                size={25}
+                color={Colors[colorScheme ?? "light"].placeholderText}
+              />
+            )}
+          </Pressable>
+          <Pressable
+            onPress={() => router.push({ pathname: "/modal", params: { id: item.id } })}
+            disabled={isActive || expanded}
+            style={styles.title}
+          >
+            <Text>{item.title}</Text>
+          </Pressable>
         </View>
-      </Animated.View>
+        {/* 完了済みの場合はソートボタンは非表示 */}
+        {item.completed ? (
+          <View style={styles.dragButton}></View>
+        ) : (
+          <Pressable onTouchStart={drag} disabled={isActive || expanded} style={styles.dragButton}>
+            {({ pressed }) => (
+              <FontAwesome
+                name="bars"
+                size={20}
+                color={Colors[colorScheme ?? "light"].placeholderText}
+                style={{
+                  opacity: pressed || isActive ? 1 : 0.5,
+                }}
+              />
+            )}
+          </Pressable>
+        )}
+      </View>
     </ScaleDecorator>
   );
 };

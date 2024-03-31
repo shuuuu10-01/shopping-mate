@@ -59,7 +59,13 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
   if (!sortable && items.length === 0) return;
 
   return (
-    <View style={[styles.wrapper, isActive && styles.active]}>
+    <View
+      style={[
+        styles.wrapper,
+        isActive && styles.active,
+        { borderColor: Colors[colorScheme ?? "light"].placeholderText },
+      ]}
+    >
       <View style={[styles.title, { marginBottom: items.length === 0 ? 0 : 10 }]}>
         <Pressable style={styles.label} onPress={handlePress}>
           {!completed && (
@@ -111,13 +117,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     padding: 10,
     borderRadius: 6,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 2,
+    borderWidth: 1,
   },
   active: { opacity: 0.9 },
   title: {
