@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 UIManager.setLayoutAnimationEnabledExperimental &&
   UIManager.setLayoutAnimationEnabledExperimental(true);
 
-export const Item = ({ item, drag, isActive, getIndex }: RenderItemParams<Todo>) => {
+export function Item({ item, drag, isActive, getIndex }: RenderItemParams<Todo>) {
   const colorScheme = useColorScheme();
   const dispatch = useAppDispatch();
   const [expanded, setExpanded] = useState(false);
@@ -96,7 +96,7 @@ export const Item = ({ item, drag, isActive, getIndex }: RenderItemParams<Todo>)
       </View>
     </ScaleDecorator>
   );
-};
+}
 
 const styles = StyleSheet.create({
   item: {
