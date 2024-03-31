@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Platform, Pressable, StyleSheet } from "react-native";
+import { Alert, Platform, Pressable, StyleSheet } from "react-native";
 
 import { Text, TextInput, View } from "@/components/Themed";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
@@ -46,8 +46,19 @@ export default function CategoryModalScreen() {
   };
 
   const handleDelete = () => {
-    deleteCategory();
-    reset();
+    Alert.alert("カテゴリーの削除", "カテゴリーを削除しますか", [
+      {
+        text: "キャンセル",
+      },
+      {
+        text: "削除する",
+        onPress: () => {
+          deleteCategory();
+          reset();
+        },
+        style: "destructive",
+      },
+    ]);
   };
 
   const handlePress = useCallback(() => {
