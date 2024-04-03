@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
-import ColorPicker from "react-native-color-picker-ios";
+import ColorPicker from "@/components/ColorPicker";
 import useDeleteCategory from "@/hooks/useDeleteCategory";
 import { Separator } from "@/components/Separator";
 
