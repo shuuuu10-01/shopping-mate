@@ -1,14 +1,18 @@
 import UIKit
 @available(iOS 14.0, *)
 @objc(ColorPickerModule)
-class ColorPickerModule: UIViewController, UIColorPickerViewControllerDelegate {
+class ColorPickerModule: RCTEventEmitter, UIColorPickerViewControllerDelegate{
     var picker: UIColorPickerViewController!
     var supportsAlpha:Bool = false
     var initialColor:UIColor = UIColor(ciColor: .black)
     var callback: RCTResponseSenderBlock!
 
+    override func supportedEvents() -> [String]! {
+        return ["onColorChange"]
+    }
+
     @objc
-    static func requiresMainQueueSetup() -> Bool {
+    override static func requiresMainQueueSetup() -> Bool {
         return true
     }
 
@@ -39,13 +43,8 @@ class ColorPickerModule: UIViewController, UIColorPickerViewControllerDelegate {
 
     // 色を選択するたびに呼ばれる関数
     func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
-        // let colorString = hexStringFromColor(color: viewController.selectedColor)
-        // self.callback([colorString])
-    }
-
-    func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        let colorString = hexStringFromColor(color: viewController.selectedColor)
-        self.callback([colorString])
+        let colorString = hexStringFromColor(color: color)
+        sendEvent(withName: "onColorChange", body: ["color": colorString])
     }
     
     func hexStringFromColor(color: UIColor) -> String {
