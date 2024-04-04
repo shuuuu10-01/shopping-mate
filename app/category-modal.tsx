@@ -3,13 +3,13 @@ import { Alert, Platform, Pressable, StyleSheet } from "react-native";
 
 import { Text, TextInput, View } from "@/components/Themed";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
-import ColorPicker from "@/components/ColorPicker";
 import useDeleteCategory from "@/hooks/useDeleteCategory";
 import { Separator } from "@/components/Separator";
+import useColorPicker from "@/components/useColorPicker";
 
 const INITIAL_COLOR = "#EB4D3Dff";
 
@@ -24,6 +24,12 @@ export default function CategoryModalScreen() {
   const navigate = useNavigation();
   const isEdit = !!id;
   const deleteCategory = useDeleteCategory(id);
+  const { showColorPicker } = useColorPicker(
+    { supportsAlpha: false, initialColor: color },
+    (color) => {
+      setColor(color);
+    },
+  );
 
   const reset = () => {
     setName("");
@@ -62,12 +68,6 @@ export default function CategoryModalScreen() {
     ]);
   };
 
-  const handlePress = useCallback(() => {
-    ColorPicker.showColorPicker({ supportsAlpha: false, initialColor: color }, (color) => {
-      setColor(color);
-    });
-  }, [color]);
-
   useEffect(() => {
     if (!isEdit) return;
     setName(originCategory.name);
@@ -95,7 +95,7 @@ export default function CategoryModalScreen() {
       <Separator />
       <View style={styles.colorLabel}>
         <Text>カラー</Text>
-        <Pressable onPress={handlePress} style={styles.color}>
+        <Pressable onPress={showColorPicker} style={styles.color}>
           <View style={styles.colorView} lightColor={color} darkColor={color}></View>
           <View style={styles.categoryName} lightColor="#eee" darkColor="#444346">
             <Text>{color}</Text>
