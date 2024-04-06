@@ -90,6 +90,7 @@ export default function CategoryModalScreen() {
           blurOnSubmit
           enterKeyHint="done"
           placeholder="カテゴリー名を入力してください"
+          maxLength={17}
         ></TextInput>
       </View>
       <Separator />
