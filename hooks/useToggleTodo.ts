@@ -20,7 +20,7 @@ export default function useToggleTodo(originTodo: Todo) {
       dispatch(
         actions.todo.edit({
           ...originTodo,
-          order: sortedTodo.length ? sortedTodo[sortedTodo.length].order + 1 : 0,
+          order: sortedTodo.length ? sortedTodo[sortedTodo.length - 1].order + 1 : 0,
           completed: false,
         }),
       );
