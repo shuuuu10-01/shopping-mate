@@ -11,6 +11,7 @@ import { useLocalSearchParams } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import useDeleteTodo from "@/hooks/useDeleteTodo";
 import { Separator } from "@/components/Separator";
+import useEditTodo from "@/hooks/useEditTodo";
 
 export default function ModalScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -20,27 +21,28 @@ export default function ModalScreen() {
   const deleteTodo = useDeleteTodo(originTodo);
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const categories = useAppSelector((state) => selectors.category.sortedCategories(state.category));
   const colorScheme = useColorScheme();
   const navigate = useNavigation();
   const isEdit = !!id;
+  const onEditTodo = useEditTodo(originTodo);
 
   const reset = () => {
     setName("");
-    setCategory("");
+    setCategoryId("");
     navigate.goBack();
   };
 
-  const handleAdd = () => {
+  const handleSubmit = () => {
     if (name === "") return;
     if (isEdit) {
-      dispatch(actions.todo.edit({ ...originTodo, title: name, categoryId: category }));
+      onEditTodo?.(name, categoryId);
     } else {
       dispatch(
         actions.todo.add({
           title: name,
-          categoryId: category,
+          categoryId: categoryId,
           completed: false,
         }),
       );
@@ -54,13 +56,13 @@ export default function ModalScreen() {
   };
 
   const categoryName = useMemo(() => {
-    const find = categories.find((c) => c.id === category);
+    const find = categories.find((c) => c.id === categoryId);
     return find?.name || "カテゴリー未選択";
-  }, [category, categories]);
+  }, [categoryId, categories]);
 
   useEffect(() => {
     if (!isEdit) return;
-    setCategory(originTodo.categoryId);
+    setCategoryId(originTodo.categoryId);
     setName(originTodo.title);
   }, [id]);
 
@@ -79,8 +81,8 @@ export default function ModalScreen() {
       </View>
       <Picker
         style={{ width: "100%" }}
-        selectedValue={category}
-        onValueChange={(itemValue) => setCategory(itemValue)}
+        selectedValue={categoryId}
+        onValueChange={(itemValue) => setCategoryId(itemValue)}
       >
         <Picker.Item
           label="カテゴリー未選択"
@@ -111,7 +113,7 @@ export default function ModalScreen() {
         ></TextInput>
       </View>
       <Separator />
-      <Pressable onPress={handleAdd} disabled={!name}>
+      <Pressable onPress={handleSubmit} disabled={!name}>
         {({ pressed }) => (
           <View
             style={[styles.addButton, { opacity: name ? 1 : 0.5 }]}
