@@ -52,9 +52,6 @@ export const { actions, reducer } = createSlice({
     setMany(state, action: PayloadAction<Todo[]>) {
       todoAdapter.setMany(state.todo, action.payload);
     },
-    toggle(state, action: PayloadAction<Todo>) {
-      todoAdapter.setOne(state.todo, { ...action.payload, completed: !action.payload.completed });
-    },
     edit(state, action: PayloadAction<Todo>) {
       todoAdapter.setOne(state.todo, action.payload);
     },

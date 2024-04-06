@@ -5,9 +5,10 @@ import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { LayoutAnimation, Pressable, StyleSheet, UIManager } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
+import { selectors, useAppSelector } from "@/redux";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
+import useToggleTodo from "@/hooks/useToggleTodo";
 
 // アニメーションの設定
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -15,12 +16,12 @@ UIManager.setLayoutAnimationEnabledExperimental &&
 
 export function Item({ item, drag, isActive, getIndex }: RenderItemParams<Todo>) {
   const colorScheme = useColorScheme();
-  const dispatch = useAppDispatch();
   const category = useAppSelector((state) =>
     selectors.category.categorySelectors.selectById(state.category.categories, item.categoryId),
   );
   const [expanded, setExpanded] = useState(false);
   const [completed, setCompleted] = useState(item.completed);
+  const onToggle = useToggleTodo(item);
 
   const handleToggleCheck = () => {
     setExpanded(true);
@@ -29,7 +30,7 @@ export function Item({ item, drag, isActive, getIndex }: RenderItemParams<Todo>)
   // expandedがtrueに変更されたときにアニメーション
   useEffect(() => {
     if (!expanded) return;
-    dispatch(actions.todo.toggle(item));
+    onToggle();
     LayoutAnimation.configureNext(
       { ...LayoutAnimation.Presets.easeInEaseOut, duration: 300 },
       () => {

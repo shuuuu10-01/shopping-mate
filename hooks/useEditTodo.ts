@@ -42,6 +42,6 @@ export default function useEditTodo(originTodo?: Todo) {
         }),
       );
     },
-    [dispatch, actions, originTodo],
+    [dispatch, actions, store, originTodo],
   );
 }
