@@ -61,5 +61,16 @@ export const { actions, reducer } = createSlice({
     delete(state, action: PayloadAction<Todo["id"]>) {
       todoAdapter.removeOne(state.todo, action.payload);
     },
+    /**
+     * 受け取ったTodoを除いた並び順に更新する
+     */
+    removeOrder(state, { payload }: PayloadAction<Todo>) {
+      const sortedTodo = selectors.sortedTodoByCategoryId(state, payload.categoryId);
+      const filter = sortedTodo.filter((s) => s.id !== payload.id);
+      todoAdapter.setMany(
+        state.todo,
+        filter.map((f, index) => ({ ...f, order: index })),
+      );
+    },
   },
 });
