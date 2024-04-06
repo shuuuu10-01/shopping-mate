@@ -5,7 +5,7 @@ import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { LayoutAnimation, Pressable, StyleSheet, UIManager } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { actions, useAppDispatch } from "@/redux";
+import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 
@@ -16,6 +16,9 @@ UIManager.setLayoutAnimationEnabledExperimental &&
 export function Item({ item, drag, isActive, getIndex }: RenderItemParams<Todo>) {
   const colorScheme = useColorScheme();
   const dispatch = useAppDispatch();
+  const category = useAppSelector((state) =>
+    selectors.category.categorySelectors.selectById(state.category.categories, item.categoryId),
+  );
   const [expanded, setExpanded] = useState(false);
   const [completed, setCompleted] = useState(item.completed);
 
@@ -56,15 +59,15 @@ export function Item({ item, drag, isActive, getIndex }: RenderItemParams<Todo>)
           >
             {completed ? (
               <FontAwesome
-                name="check-square"
+                name="check-circle"
                 size={25}
-                color={Colors[colorScheme ?? "light"].text}
+                color={category?.color ? category.color : Colors[colorScheme ?? "light"].text}
               />
             ) : (
               <FontAwesome
-                name="square-o"
+                name="circle-thin"
                 size={25}
-                color={Colors[colorScheme ?? "light"].placeholderText}
+                color={category?.color ? category.color : Colors[colorScheme ?? "light"].text}
               />
             )}
           </Pressable>
