@@ -56,9 +56,8 @@ export default function ModalScreen() {
     reset();
   };
 
-  const categoryName = useMemo(() => {
-    const find = categories.find((c) => c.id === categoryId);
-    return find?.name || "カテゴリー未選択";
+  const selectedCategory = useMemo(() => {
+    return categories.find((c) => c.id === categoryId);
   }, [categoryId, categories]);
 
   useEffect(() => {
@@ -77,7 +76,14 @@ export default function ModalScreen() {
       <View style={styles.pickerLabel}>
         <Text>カテゴリー</Text>
         <View style={styles.categoryName} lightColor="#eee" darkColor="#444346">
-          <Text>{categoryName}</Text>
+          {selectedCategory && (
+            <View
+              style={styles.circle}
+              lightColor={selectedCategory.color || Colors[colorScheme ?? "light"].border}
+              darkColor={selectedCategory.color || Colors[colorScheme ?? "light"].border}
+            ></View>
+          )}
+          <Text>{selectedCategory ? selectedCategory.name : "カテゴリー未選択"}</Text>
         </View>
       </View>
       <Picker
@@ -97,6 +103,7 @@ export default function ModalScreen() {
               label={c.name}
               value={c.id}
               color={Colors[colorScheme ?? "light"].text}
+              style={{ fontWeight: "600" }}
             ></Picker.Item>
           );
         })}
@@ -110,7 +117,7 @@ export default function ModalScreen() {
           onChangeText={setName}
           blurOnSubmit
           enterKeyHint="done"
-          placeholder="タイトルを入力してください"
+          placeholder="商品名を入力してください"
         ></TextInput>
       </View>
       <Separator />
@@ -187,6 +194,22 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 11,
     borderRadius: 6,
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 7,
+  },
+  circle: {
+    width: 15,
+    height: 15,
+    borderRadius: 7.5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
   },
   titleLabel: {
     display: "flex",
