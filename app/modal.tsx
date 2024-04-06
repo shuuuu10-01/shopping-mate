@@ -44,6 +44,7 @@ export default function ModalScreen() {
           title: name,
           categoryId: categoryId,
           completed: false,
+          createdAt: new Date().toISOString(),
         }),
       );
     }
