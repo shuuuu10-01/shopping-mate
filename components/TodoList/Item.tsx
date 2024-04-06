@@ -4,7 +4,7 @@ import { Text, View } from "../Themed";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { LayoutAnimation, Pressable, StyleSheet, UIManager } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, FontAwesome6 } from "@expo/vector-icons";
 import { selectors, useAppSelector } from "@/redux";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
@@ -86,8 +86,8 @@ export function Item({ item, drag, isActive, getIndex }: RenderItemParams<Todo>)
         ) : (
           <Pressable onTouchStart={drag} disabled={isActive || expanded} style={styles.dragButton}>
             {({ pressed }) => (
-              <FontAwesome
-                name="bars"
+              <FontAwesome6
+                name="grip-lines"
                 size={20}
                 color={Colors[colorScheme ?? "light"].placeholderText}
                 style={{
