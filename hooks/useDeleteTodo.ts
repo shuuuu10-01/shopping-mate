@@ -1,4 +1,4 @@
-import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
+import { actions, useAppDispatch } from "@/redux";
 import { Todo } from "@/types/todo";
 import { useCallback } from "react";
 
@@ -10,22 +10,11 @@ import { useCallback } from "react";
 export default function useDeleteTodo(todo?: Todo) {
   if (!todo) return;
   const dispatch = useAppDispatch();
-  const sortedTodo = useAppSelector((state) =>
-    selectors.todo.sortedTodoByCategoryId(state.todo, todo.categoryId),
-  );
-  const filteredTodo = sortedTodo.filter((s) => s.id !== todo.id);
 
   return useCallback(() => {
     // Todoの並び順を更新
-    dispatch(
-      actions.todo.setMany(
-        filteredTodo.map((t, index) => ({
-          ...t,
-          order: index,
-        })),
-      ),
-    );
+    dispatch(actions.todo.removeOrder(todo));
     // Todoを削除
     dispatch(actions.todo.delete(todo.id));
-  }, [actions, filteredTodo, todo]);
+  }, [dispatch, actions, todo]);
 }
