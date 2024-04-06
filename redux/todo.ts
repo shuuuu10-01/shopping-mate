@@ -1,6 +1,7 @@
+import { Category, SerializedCategory } from "@/types/category";
 import { SerializedTodo, Todo } from "@/types/todo";
 import { PayloadAction, createEntityAdapter, createSelector, createSlice } from "@reduxjs/toolkit";
-
+import { selectors as categorySelectors } from "./category";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 
@@ -11,6 +12,10 @@ type State = {
 const todoAdapter = createEntityAdapter({
   selectId: (todo: Todo) => todo.id,
 });
+
+type TodoHasCategory = Todo & {
+  category?: Category;
+};
 
 const todoSelectors = todoAdapter.getSelectors();
 
@@ -23,10 +28,43 @@ const sortedTodoByCategoryId = createSelector(
   },
 );
 
+/**
+ * 完了済みTodoを取得する
+ *
+ * カテゴリーのソート順に合わせてソートを行う。
+ * カテゴリー未選択のタスクは後ろに配置。
+ * 同じカテゴリーのTodoは作成日時の昇順でソートする
+ */
 const completedTodo = createSelector(
   (state: State) => todoSelectors.selectAll(state.todo),
-  (state) => {
-    return state.filter((s) => s.completed);
+  (_: State, state: SerializedCategory) => categorySelectors.categorySelectors.selectAll(state),
+  (state, categoryState) => {
+    const filter = state.filter((s) => s.completed);
+    const todoHasCategory = filter.map((f) => {
+      const category = categoryState.find((c) => f.categoryId === c.id);
+      return { ...f, category: category };
+    });
+    const sort = todoHasCategory.sort((a, b) => {
+      if (a.category === undefined && b.category === undefined) {
+        const dateA = new Date(a.createdAt).getTime(),
+          dateB = new Date(b.createdAt).getTime();
+        return dateA - dateB;
+      }
+
+      // 片方のorderのみundefinedの場合は後ろに配置
+      if (a.category === undefined) return 1;
+      if (b.category === undefined) return -1;
+
+      // orderで比較
+      if (a.category.order < b.category.order) return -1;
+      if (a.category.order > b.category.order) return 1;
+
+      // orderが同じ場合は、createdAtで比較
+      const dateA = new Date(a.createdAt).getTime(),
+        dateB = new Date(b.createdAt).getTime();
+      return dateA - dateB;
+    });
+    return sort;
   },
 );
 

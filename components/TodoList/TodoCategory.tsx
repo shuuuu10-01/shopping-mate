@@ -40,7 +40,7 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
   };
 
   const items = useAppSelector((state) => {
-    if (completed) return selectors.todo.completedTodo(state.todo);
+    if (completed) return selectors.todo.completedTodo(state.todo, state.category.categories);
 
     return selectors.todo.sortedTodoByCategoryId(state.todo, category?.id || "");
   });
