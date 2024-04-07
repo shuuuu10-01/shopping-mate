@@ -26,7 +26,10 @@ import {
 const rootReducer = combineReducers({ todo: todoReducer, category: categoryReducer });
 
 export const store = configureStore({
-  reducer: persistReducer({ key: "root", storage: AsyncStorage, whitelist: ["todo"] }, rootReducer),
+  reducer: persistReducer(
+    { key: "root", storage: AsyncStorage, whitelist: ["todo", "category"] },
+    rootReducer,
+  ),
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
