@@ -110,14 +110,14 @@ export default function ModalScreen() {
       </Picker>
       <Separator />
       <View style={styles.titleLabel}>
-        <Text>商品名</Text>
+        <Text>タスク名</Text>
         <TextInput
           style={styles.titleInput}
           value={name}
           onChangeText={setName}
           blurOnSubmit
           enterKeyHint="done"
-          placeholder="商品名を入力してください"
+          placeholder="タスク名を入力してください"
         ></TextInput>
       </View>
       <Separator />
