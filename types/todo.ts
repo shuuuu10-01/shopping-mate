@@ -6,6 +6,7 @@ export type Todo = {
   title: string;
   order: number;
   completed: boolean;
+  createdAt: string;
 };
 
 export type SerializedTodo = EntityState<Todo, string>;

@@ -11,6 +11,7 @@ import { useLocalSearchParams } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import useDeleteTodo from "@/hooks/useDeleteTodo";
 import { Separator } from "@/components/Separator";
+import useEditTodo from "@/hooks/useEditTodo";
 
 export default function ModalScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -20,28 +21,30 @@ export default function ModalScreen() {
   const deleteTodo = useDeleteTodo(originTodo);
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const categories = useAppSelector((state) => selectors.category.sortedCategories(state.category));
   const colorScheme = useColorScheme();
   const navigate = useNavigation();
   const isEdit = !!id;
+  const onEditTodo = useEditTodo(originTodo);
 
   const reset = () => {
     setName("");
-    setCategory("");
+    setCategoryId("");
     navigate.goBack();
   };
 
-  const handleAdd = () => {
+  const handleSubmit = () => {
     if (name === "") return;
     if (isEdit) {
-      dispatch(actions.todo.edit({ ...originTodo, title: name, categoryId: category }));
+      onEditTodo?.(name, categoryId);
     } else {
       dispatch(
         actions.todo.add({
           title: name,
-          categoryId: category,
+          categoryId: categoryId,
           completed: false,
+          createdAt: new Date().toISOString(),
         }),
       );
     }
@@ -53,14 +56,13 @@ export default function ModalScreen() {
     reset();
   };
 
-  const categoryName = useMemo(() => {
-    const find = categories.find((c) => c.id === category);
-    return find?.name || "カテゴリー未選択";
-  }, [category, categories]);
+  const selectedCategory = useMemo(() => {
+    return categories.find((c) => c.id === categoryId);
+  }, [categoryId, categories]);
 
   useEffect(() => {
     if (!isEdit) return;
-    setCategory(originTodo.categoryId);
+    setCategoryId(originTodo.categoryId);
     setName(originTodo.title);
   }, [id]);
 
@@ -74,13 +76,20 @@ export default function ModalScreen() {
       <View style={styles.pickerLabel}>
         <Text>カテゴリー</Text>
         <View style={styles.categoryName} lightColor="#eee" darkColor="#444346">
-          <Text>{categoryName}</Text>
+          {selectedCategory && (
+            <View
+              style={styles.circle}
+              lightColor={selectedCategory.color || Colors[colorScheme ?? "light"].border}
+              darkColor={selectedCategory.color || Colors[colorScheme ?? "light"].border}
+            ></View>
+          )}
+          <Text>{selectedCategory ? selectedCategory.name : "カテゴリー未選択"}</Text>
         </View>
       </View>
       <Picker
         style={{ width: "100%" }}
-        selectedValue={category}
-        onValueChange={(itemValue) => setCategory(itemValue)}
+        selectedValue={categoryId}
+        onValueChange={(itemValue) => setCategoryId(itemValue)}
       >
         <Picker.Item
           label="カテゴリー未選択"
@@ -94,24 +103,25 @@ export default function ModalScreen() {
               label={c.name}
               value={c.id}
               color={Colors[colorScheme ?? "light"].text}
+              style={{ fontWeight: "600" }}
             ></Picker.Item>
           );
         })}
       </Picker>
       <Separator />
       <View style={styles.titleLabel}>
-        <Text>商品名</Text>
+        <Text>タスク名</Text>
         <TextInput
           style={styles.titleInput}
           value={name}
           onChangeText={setName}
           blurOnSubmit
           enterKeyHint="done"
-          placeholder="タイトルを入力してください"
+          placeholder="タスク名を入力してください"
         ></TextInput>
       </View>
       <Separator />
-      <Pressable onPress={handleAdd} disabled={!name}>
+      <Pressable onPress={handleSubmit} disabled={!name}>
         {({ pressed }) => (
           <View
             style={[styles.addButton, { opacity: name ? 1 : 0.5 }]}
@@ -184,6 +194,22 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 11,
     borderRadius: 6,
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 7,
+  },
+  circle: {
+    width: 15,
+    height: 15,
+    borderRadius: 7.5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
   },
   titleLabel: {
     display: "flex",

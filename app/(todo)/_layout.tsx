@@ -25,6 +25,7 @@ export default function _layout() {
             </Pressable>
           </Link>
         ),
+        headerStyle: { backgroundColor: Colors[colorScheme ?? "light"].background },
       }}
     ></Stack>
   );

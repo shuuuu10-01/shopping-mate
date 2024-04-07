@@ -4,10 +4,11 @@ import { Text, View } from "../Themed";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { LayoutAnimation, Pressable, StyleSheet, UIManager } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import { actions, useAppDispatch } from "@/redux";
+import { FontAwesome, FontAwesome6 } from "@expo/vector-icons";
+import { selectors, useAppSelector } from "@/redux";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
+import useToggleTodo from "@/hooks/useToggleTodo";
 
 // アニメーションの設定
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -15,9 +16,12 @@ UIManager.setLayoutAnimationEnabledExperimental &&
 
 export function Item({ item, drag, isActive, getIndex }: RenderItemParams<Todo>) {
   const colorScheme = useColorScheme();
-  const dispatch = useAppDispatch();
+  const category = useAppSelector((state) =>
+    selectors.category.categorySelectors.selectById(state.category.categories, item.categoryId),
+  );
   const [expanded, setExpanded] = useState(false);
   const [completed, setCompleted] = useState(item.completed);
+  const onToggle = useToggleTodo(item);
 
   const handleToggleCheck = () => {
     setExpanded(true);
@@ -26,7 +30,7 @@ export function Item({ item, drag, isActive, getIndex }: RenderItemParams<Todo>)
   // expandedがtrueに変更されたときにアニメーション
   useEffect(() => {
     if (!expanded) return;
-    dispatch(actions.todo.toggle(item));
+    onToggle();
     LayoutAnimation.configureNext(
       { ...LayoutAnimation.Presets.easeInEaseOut, duration: 300 },
       () => {
@@ -56,15 +60,15 @@ export function Item({ item, drag, isActive, getIndex }: RenderItemParams<Todo>)
           >
             {completed ? (
               <FontAwesome
-                name="check-square"
+                name="check-circle"
                 size={25}
-                color={Colors[colorScheme ?? "light"].text}
+                color={category?.color ? category.color : Colors[colorScheme ?? "light"].text}
               />
             ) : (
               <FontAwesome
-                name="square-o"
+                name="circle-thin"
                 size={25}
-                color={Colors[colorScheme ?? "light"].placeholderText}
+                color={category?.color ? category.color : Colors[colorScheme ?? "light"].text}
               />
             )}
           </Pressable>
@@ -82,8 +86,8 @@ export function Item({ item, drag, isActive, getIndex }: RenderItemParams<Todo>)
         ) : (
           <Pressable onTouchStart={drag} disabled={isActive || expanded} style={styles.dragButton}>
             {({ pressed }) => (
-              <FontAwesome
-                name="bars"
+              <FontAwesome6
+                name="grip-lines"
                 size={20}
                 color={Colors[colorScheme ?? "light"].placeholderText}
                 style={{

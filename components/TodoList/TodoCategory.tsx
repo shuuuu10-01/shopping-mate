@@ -10,7 +10,7 @@ import { Todo } from "@/types/todo";
 import { actions, selectors, useAppDispatch, useAppSelector } from "@/redux";
 import { Item } from "./Item";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome6 } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { router } from "expo-router";
 
@@ -40,7 +40,7 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
   };
 
   const items = useAppSelector((state) => {
-    if (completed) return selectors.todo.completedTodo(state.todo);
+    if (completed) return selectors.todo.completedTodo(state.todo, state.category.categories);
 
     return selectors.todo.sortedTodoByCategoryId(state.todo, category?.id || "");
   });
@@ -80,8 +80,8 @@ export function TodoCategory({ sortable, category, completed, drag, isActive }: 
         {sortable && (
           <Pressable onTouchStart={drag} style={styles.dragButton} disabled={isActive}>
             {({ pressed }) => (
-              <FontAwesome
-                name="bars"
+              <FontAwesome6
+                name="grip-lines"
                 size={20}
                 color={Colors[colorScheme ?? "light"].placeholderText}
                 style={{
